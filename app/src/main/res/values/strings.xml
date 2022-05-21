@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">SeeSharp</string>
+    <string name="accessibility_service_label">Application Blocking</string>
+    <string name="accessibility_service_description">Accessibility description</string>
+</resources>
