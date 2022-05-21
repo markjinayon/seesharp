@@ -4,8 +4,10 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="..\:/JEM FILES/4TH/SeeSharp/app/src/main/res/layout/activity_application_blocking.xml" value="0.1265625" />
-        <entry key="..\:/JEM FILES/4TH/SeeSharp/app/src/main/res/layout/activity_child_dashboard.xml" value="0.1265625" />
-        <entry key="..\:/JEM FILES/4TH/SeeSharp/app/src/main/res/layout/activity_lock.xml" value="0.1265625" />
+        <entry key="..\:/JEM FILES/4TH/SeeSharp/app/src/main/res/layout/activity_child_dashboard.xml" value="0.264" />
+        <entry key="..\:/JEM FILES/4TH/SeeSharp/app/src/main/res/layout/activity_lock.xml" value="0.2" />
+        <entry key="..\:/JEM FILES/4TH/SeeSharp/app/src/main/res/layout/activity_sign_in.xml" value="0.22826086956521738" />
+        <entry key="..\:/JEM FILES/4TH/SeeSharp/app/src/main/res/layout/activity_sign_up.xml" value="0.22826086956521738" />
         <entry key="..\:/Users/Jezreel Bitgue/Downloads/SeeSharp/app/src/main/res/layout/activity_lock.xml" value="0.2" />
       </map>
     </option>
