@@ -12,8 +12,10 @@ import com.parentalcontrol.seesharp.services.accessibility.ApplicationBlockingAc
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.SwitchCompat;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.drawable.Drawable;
@@ -22,9 +24,12 @@ import android.provider.Settings;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Switch;
+
+import java.util.HashMap;
 
 public class ApplicationBlockingActivity extends AppCompatActivity {
 
@@ -72,17 +77,35 @@ public class ApplicationBlockingActivity extends AppCompatActivity {
                         taskOnComplete -> {
                         },
                         taskOnFailure -> Log.e("Error", taskOnFailure.toString()));
-
+                HashMap<String, String> appsMap = new HashMap<>();
                 for (String packageName: userData.installedApplications) {
                     try {
+                        @SuppressLint("UseSwitchCompatOrMaterialCode") Switch sw = new Switch(getApplicationContext());
                         Drawable icon = getPackageManager().getApplicationIcon(packageName);
-                        Switch sw = new Switch(getApplicationContext());
-                        sw.setText(packageName);
+                        String appLabel = (String) getPackageManager().getApplicationLabel(getPackageManager().getApplicationInfo(packageName, 0));
+
+                        appsMap.put(appLabel, packageName);
+
+                        sw.setText(appLabel);
                         sw.setCompoundDrawables(icon, null, null, null);
-                        ImageView temp = new ImageView(getApplicationContext());
-                        temp.setImageDrawable(icon);
+                        sw.setChecked(userData.blockedApplications.contains(packageName));
                         applicationList_appBlocking.addView(sw);
-                        applicationList_appBlocking.addView(temp);
+
+                        sw.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                            @Override
+                            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                                if (b) {
+                                    userData.blockedApplications.add(appsMap.get(sw.getText().toString()));
+                                } else {
+                                    while (userData.blockedApplications.remove(appsMap.get(sw.getText().toString()))){}
+                                }
+
+                                FirebaseMethod.updateDataFieldOfUser(FirebaseMethod.getCurrentUserUID(), "blockedApplications", userData.blockedApplications,
+                                        taskOnComplete -> {
+                                        },
+                                        taskOnFailure -> Log.e("Error", taskOnFailure.toString()));
+                            }
+                        });
                     } catch (PackageManager.NameNotFoundException e) {
                         e.printStackTrace();
                     }

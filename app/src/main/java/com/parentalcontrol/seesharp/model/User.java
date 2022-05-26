@@ -1,5 +1,7 @@
 package com.parentalcontrol.seesharp.model;
 
+import androidx.annotation.NonNull;
+
 import java.util.ArrayList;
 
 public class User {
@@ -26,6 +28,7 @@ public class User {
         this.installedApplications = new ArrayList<>();
     }
 
+    @NonNull
     @Override
     public String toString() {
         return "User{" +

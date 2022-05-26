@@ -48,10 +48,8 @@ public class DeviceHelper {
         List<ApplicationInfo> installedApplications = packageManager.getInstalledApplications(PackageManager.GET_META_DATA);
         ArrayList<String> apps = new ArrayList<>();
 
-        for (ApplicationInfo appInfo : installedApplications)
-        {
-            if ((appInfo.flags & ApplicationInfo.FLAG_UPDATED_SYSTEM_APP) != 0)
-            {
+        for (ApplicationInfo appInfo : installedApplications) {
+            if ((appInfo.flags & ApplicationInfo.FLAG_SYSTEM) == 0 || (appInfo.flags & ApplicationInfo.FLAG_UPDATED_SYSTEM_APP) != 0) {
                 apps.add(appInfo.packageName);
             }
         }

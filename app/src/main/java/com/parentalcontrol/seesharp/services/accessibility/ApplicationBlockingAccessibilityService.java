@@ -9,34 +9,51 @@ import android.util.Log;
 import android.view.accessibility.AccessibilityEvent;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.ValueEventListener;
 import com.parentalcontrol.seesharp.activities.SignInActivity;
 import com.parentalcontrol.seesharp.firebase.FirebaseMethod;
 import com.parentalcontrol.seesharp.helper.DeviceHelper;
+import com.parentalcontrol.seesharp.model.User;
 import com.parentalcontrol.seesharp.services.intent.MonitorAppBlockingAccessibilityService;
 
 public class ApplicationBlockingAccessibilityService extends AccessibilityService {
     private static final String TAG = "MyAccessibilityService";
+    private User userData;
+
+    @Override
+    public void onCreate() {
+        super.onCreate();
+
+        userData = null;
+        FirebaseMethod.listenToUserDataFromRealtimeDatabase(FirebaseMethod.getCurrentUserUID(), new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                userData = snapshot.getValue(User.class);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+    }
 
     @Override
     public void onAccessibilityEvent(AccessibilityEvent accessibilityEvent) {
-        Log.e(TAG, "onAccessibilityEvent: ");
         String packageName = accessibilityEvent.getPackageName().toString();
-        Log.e(TAG, "package name is : " + packageName);
-        PackageManager packageManager = this.getPackageManager();
-        try {
-            ApplicationInfo applicationInfo = packageManager.getApplicationInfo(packageName, 0);
-            CharSequence applicationLabel = packageManager.getApplicationLabel(applicationInfo);
-            Log.e(TAG, "app name is : " + applicationLabel);
-
-            if (applicationLabel.equals("Messenger")) {
-                Intent startMain = new Intent(Intent.ACTION_MAIN);
-                startMain.addCategory(Intent.CATEGORY_HOME);
-                startMain.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                startActivity(startMain);
-            }
-        } catch (PackageManager.NameNotFoundException e) {
-            e.printStackTrace();
+        Log.e(TAG, "onAccessibilityEvent: " + packageName);
+        Log.e(TAG, "blocked: " + userData.blockedApplications.toString());
+        if (userData != null && userData.blockedApplications.contains(packageName)) {
+            Intent startMain = new Intent(Intent.ACTION_MAIN);
+            startMain.addCategory(Intent.CATEGORY_HOME);
+            startMain.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(startMain);
         }
+
     }
 
     @Override
@@ -54,6 +71,7 @@ public class ApplicationBlockingAccessibilityService extends AccessibilityServic
         setServiceInfo(info);
 
         startService(new Intent(this, MonitorAppBlockingAccessibilityService.class));
+
 
         FirebaseMethod.updateDataFieldOfUser(FirebaseMethod.getCurrentUserUID(), "appBlockingState", true,
                 taskOnComplete -> {
