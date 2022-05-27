@@ -3,16 +3,16 @@ package com.parentalcontrol.seesharp.activities;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthUserCollisionException;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.FirebaseDatabase;
 import com.parentalcontrol.seesharp.R;
 import com.parentalcontrol.seesharp.model.User;
-import com.parentalcontrol.seesharp.firebase.FirebaseMethod;
 import com.parentalcontrol.seesharp.helper.DeviceHelper;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.util.Patterns;
 import android.view.View;
 import android.widget.Button;
@@ -21,9 +21,14 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Toast;
 
+import java.util.Objects;
+
 public class SignUpActivity extends AppCompatActivity {
 
-    private Button signIn_signUp, signUp_signUp;
+    FirebaseAuth firebaseAuth;
+    FirebaseDatabase firebaseDatabase;
+
+    //private Button signIn_signUp, signUp_signUp;
     private TextInputLayout email_signUp, password_signUp, confirmPassword_signUp, fullName_signUp;
     private RadioGroup userType_signUp;
     private ProgressBar progressBar_signUp;
@@ -32,6 +37,11 @@ public class SignUpActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_up);
+
+        Button signIn_signUp, signUp_signUp;
+
+        firebaseAuth = FirebaseAuth.getInstance();
+        firebaseDatabase = FirebaseDatabase.getInstance();
 
         email_signUp = findViewById(R.id.email_signUp);
         password_signUp = findViewById(R.id.password_signUp);
@@ -50,10 +60,10 @@ public class SignUpActivity extends AppCompatActivity {
     }
 
     public void signUp() {
-        String email = email_signUp.getEditText().getText().toString().trim();
-        String password = password_signUp.getEditText().getText().toString().trim();
-        String confirmPassword = confirmPassword_signUp.getEditText().getText().toString().trim();
-        String fullName = fullName_signUp.getEditText().getText().toString().trim();
+        String email = Objects.requireNonNull(email_signUp.getEditText()).getText().toString().trim();
+        String password = Objects.requireNonNull(password_signUp.getEditText()).getText().toString().trim();
+        String confirmPassword = Objects.requireNonNull(confirmPassword_signUp.getEditText()).getText().toString().trim();
+        String fullName = Objects.requireNonNull(fullName_signUp.getEditText()).getText().toString().trim();
         String userType = ((RadioButton) findViewById((userType_signUp).getCheckedRadioButtonId())).getText().toString().trim();
 
         if (email.isEmpty()) {
@@ -105,37 +115,49 @@ public class SignUpActivity extends AppCompatActivity {
         }
 
         progressBar_signUp.setVisibility(View.VISIBLE);
+        firebaseAuth.createUserWithEmailAndPassword(email, password)
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        FirebaseUser firebaseUser = task.getResult().getUser();
+                        if (firebaseUser != null) {
+                            saveUserData(new User(firebaseUser.getUid(), email, password, fullName, userType, DeviceHelper.getDeviceName()));
+                        } else {
+                            Toast.makeText(SignUpActivity.this, "Failed to register user", Toast.LENGTH_LONG).show();
+                            progressBar_signUp.setVisibility(View.GONE);
+                        }
+                    } else {
+                        Toast.makeText(SignUpActivity.this, "Failed to register user", Toast.LENGTH_LONG).show();
+                        if (task.getException() instanceof FirebaseAuthUserCollisionException) {
+                            email_signUp.setError("Email already exists!");
+                            email_signUp.getEditText().requestFocus();
+                        }
+                        progressBar_signUp.setVisibility(View.GONE);
+                    }
 
-        User user = new User("", email, password, fullName, userType, DeviceHelper.getDeviceName());
-        FirebaseMethod.createNewUser(user,
-                taskOnComplete -> {
-                    if (taskOnComplete.isSuccessful()) {
-                        user.accountId = FirebaseAuth.getInstance().getUid();
-                        FirebaseMethod.addUserDataToRealtimeDatabase(user,
-                                task1OnComplete -> {
-                                    if (task1OnComplete.isSuccessful()) {
-                                        Toast.makeText(SignUpActivity.this, "User has been registered successfully", Toast.LENGTH_LONG).show();
-                                        openSignInActivity();
-                                    }
-                                },
-                                task1OnFailure -> {
-                                    Toast.makeText(SignUpActivity.this, "Failed to register user", Toast.LENGTH_LONG).show();
-                                    Log.e("FirebaseDatabase Failure", task1OnFailure.toString());
-                                });
+                });
+    }
+
+    public void saveUserData(User user) {
+        firebaseDatabase.getReference("users")
+                .child(user.accountId)
+                .setValue(user)
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        Toast.makeText(SignUpActivity.this, "User has been registered successfully", Toast.LENGTH_LONG).show();
+                        openSignInActivity();
+                    } else {
+                        Toast.makeText(SignUpActivity.this, "Failed to save user data", Toast.LENGTH_LONG).show();
                     }
                     progressBar_signUp.setVisibility(View.GONE);
-                },
-                taskOnFailure -> {
-                    Toast.makeText(SignUpActivity.this, "Failed to register user", Toast.LENGTH_LONG).show();
-                    Log.e("FirebaseAuth Failure", taskOnFailure.toString());
-                    if (taskOnFailure instanceof FirebaseAuthUserCollisionException) {
-                        email_signUp.setError("Email already exists!");
-                        email_signUp.getEditText().requestFocus();
-                    }
                 });
     }
 
     public void openSignInActivity() {
+
+        if (firebaseAuth.getCurrentUser() != null) {
+            firebaseAuth.signOut();
+        }
+
         startActivity(new Intent(this, SignInActivity.class));
         finish();
     }
