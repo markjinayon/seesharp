@@ -3,6 +3,7 @@ package com.parentalcontrol.seesharp.activities.child;
 import com.parentalcontrol.seesharp.R;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -10,7 +11,7 @@ import android.widget.Button;
 
 public class ChildDashboardActivity extends AppCompatActivity {
 
-    private Button appBlocking_childDashboard;
+    private CardView appBlocking_childDashboard;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

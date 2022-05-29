@@ -8,7 +8,10 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.parentalcontrol.seesharp.R;
 import com.parentalcontrol.seesharp.activities.SignInActivity;
+import com.parentalcontrol.seesharp.adapters.AppBlockingListAdapter;
+import com.parentalcontrol.seesharp.helper.DeviceHelper;
 import com.parentalcontrol.seesharp.model.User;
+import com.parentalcontrol.seesharp.services.accessibility.ApplicationBlockingAccessibilityService;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -20,8 +23,10 @@ import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.Switch;
 import android.widget.Toast;
 
@@ -34,7 +39,7 @@ public class ApplicationBlockingActivity extends AppCompatActivity {
 
     private ConstraintLayout accessibilityEnabled_appBlocking, accessibilityDisabled_appBlocking;
     private Button enableAppBlocking_appBlocking;
-    private LinearLayout applicationList_appBlocking;
+    private ListView applicationList_appBlocking;
 
 
     @Override
@@ -55,7 +60,14 @@ public class ApplicationBlockingActivity extends AppCompatActivity {
 
         applicationList_appBlocking = findViewById(R.id.applicationList_appBlocking);
 
-        dataListener();
+        FirebaseUser firebaseUser = firebaseAuth.getCurrentUser();
+        if (firebaseUser != null) {
+            firebaseDatabase.getReference("users")
+                    .child(firebaseUser.getUid())
+                    .child("appBlockingState")
+                    .setValue(DeviceHelper.isAccessibilityServiceEnabled(getApplicationContext(), ApplicationBlockingAccessibilityService.class))
+                    .addOnCompleteListener(task -> dataListener());
+        }
     }
 
     public void dataListener() {
@@ -85,7 +97,9 @@ public class ApplicationBlockingActivity extends AppCompatActivity {
                             accessibilityDisabled_appBlocking.setVisibility(View.VISIBLE);
                         }
 
-                        displayApps(user);
+
+                        AppBlockingListAdapter adapter = new AppBlockingListAdapter(getApplicationContext(), user.installedApplications, user.blockedApplications);
+                        applicationList_appBlocking.setAdapter(adapter);
 
                     }
 
@@ -94,38 +108,5 @@ public class ApplicationBlockingActivity extends AppCompatActivity {
 
                     }
                 });
-    }
-
-    public void displayApps(User user) {
-        applicationList_appBlocking.removeAllViews();
-        for (String packageName: user.installedApplications) {
-            try {
-                @SuppressLint("UseSwitchCompatOrMaterialCode") Switch appSwitch = new Switch(getApplicationContext());
-                Drawable icon = getPackageManager().getApplicationIcon(packageName);
-                String appLabel = getPackageManager().getApplicationLabel(getPackageManager().getApplicationInfo(packageName, 0)).toString();
-
-                appSwitch.setText(appLabel);
-                appSwitch.setCompoundDrawables(icon, null, null, null);
-                appSwitch.setChecked(user.blockedApplications.contains(packageName));
-
-                applicationList_appBlocking.addView(appSwitch);
-
-                appSwitch.setOnCheckedChangeListener((compoundButton, b) -> {
-                    if (b) {
-                        user.blockedApplications.add(packageName);
-                    } else {
-                        while (user.blockedApplications.remove(packageName)) {}
-                    }
-
-                    firebaseDatabase.getReference("users")
-                            .child(user.accountId)
-                            .child("blockedApplications")
-                            .setValue(user.blockedApplications);
-                });
-
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
     }
 }

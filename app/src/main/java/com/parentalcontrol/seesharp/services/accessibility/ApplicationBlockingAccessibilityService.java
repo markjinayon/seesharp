@@ -39,6 +39,7 @@ public class ApplicationBlockingAccessibilityService extends AccessibilityServic
         FirebaseUser firebaseUser = firebaseAuth.getCurrentUser();
 
         if (firebaseUser == null) {
+            stopSelf();
             return;
         }
 

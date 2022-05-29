@@ -78,4 +78,9 @@ public class MainActivity extends AppCompatActivity {
         startActivity(new Intent(this, ChildDashboardActivity.class));
         finish();
     }
+
+    @Override
+    public void finish() {
+        super.finish();
+    }
 }
