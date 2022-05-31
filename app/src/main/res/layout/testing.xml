@@ -5,75 +5,85 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <LinearLayout
-        android:id="@+id/seesharp"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:background="@color/purple_dark"
-        android:orientation="vertical"
-        app:layout_constraintBottom_toBottomOf="parent"
+    <androidx.cardview.widget.CardView
+        android:id="@+id/userCard"
+        android:layout_width="415dp"
+        android:layout_height="278dp"
+        app:cardBackgroundColor="@color/purple_white"
+        app:cardPreventCornerOverlap="false"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <TextView
-            android:id="@+id/textView9"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@color/purple_dark"
-            android:fontFamily="@font/bungee"
-            android:text="SEESHARP"
-            android:textAlignment="center"
-            android:textColor="@color/white"
-            android:textSize="40sp" />
+            android:orientation="vertical">
 
-    </LinearLayout>
+            <LinearLayout
+                android:id="@+id/seesharp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/transparent"
+                android:orientation="vertical">
 
-    <LinearLayout
-        android:id="@+id/linearLayout2"
-        android:layout_width="408dp"
-        android:layout_height="156dp"
-        android:layout_marginTop="90dp"
-        android:orientation="horizontal"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/seesharp">
+                <TextView
+                    android:id="@+id/textView9"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@color/transparent"
+                    android:fontFamily="@font/bungee"
+                    android:text="SEESHARP"
+                    android:textAlignment="center"
+                    android:textColor="@color/primary"
+                    android:textSize="40sp" />
 
-        <ImageView
-            android:id="@+id/user_image"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:paddingTop="20dp"
-            tools:srcCompat="@tools:sample/avatars" />
+            </LinearLayout>
 
-        <TextView
-            android:id="@+id/user_name"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:fontFamily="sans-serif"
-            android:paddingTop="50dp"
-            android:paddingRight="0dp"
-            android:text=" Ronie Dave"
-            android:textColor="@color/white"
-            android:textSize="34sp" />
+            <LinearLayout
+                android:id="@+id/linearLayout2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
 
-    </LinearLayout>
+                <ImageView
+                    android:id="@+id/user_image"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:paddingTop="20dp"
+                    tools:srcCompat="@tools:sample/avatars" />
+
+                <TextView
+                    android:id="@+id/userName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:fontFamily="sans-serif"
+                    android:paddingTop="50dp"
+                    android:paddingRight="0dp"
+                    android:text=" Ronie Dave"
+                    android:textColor="@color/black"
+                    android:textSize="34sp" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
 
     <LinearLayout
         android:id="@+id/linearLayout3"
         android:layout_width="411dp"
         android:layout_height="175dp"
-        android:layout_marginTop="25dp"
+        android:layout_marginTop="30dp"
         android:orientation="horizontal"
         android:padding="10dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/linearLayout2">
+        app:layout_constraintTop_toBottomOf="@+id/userCard">
 
         <androidx.cardview.widget.CardView
-            android:id="@+id/appBlocking_childDashboard"
+            android:id="@+id/appBLocking_childDashboard"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_margin="10dp"
@@ -206,7 +216,7 @@
                     android:layout_height="75dp"
                     android:layout_centerHorizontal="true"
                     android:layout_marginTop="15dp"
-                    app:srcCompat="@drawable/ic_ai" />
+                    app:srcCompat="@drawable/ic_baseline_app_blocking_24" />
 
                 <TextView
                     android:id="@+id/textView4"

@@ -7,7 +7,6 @@ import androidx.cardview.widget.CardView;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.widget.Button;
 
 public class ChildDashboardActivity extends AppCompatActivity {
 
@@ -18,7 +17,7 @@ public class ChildDashboardActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_child_dashboard);
 
-        appBlocking_childDashboard = findViewById(R.id.appBlocking_childDashboard);
+        appBlocking_childDashboard = findViewById(R.id.appBLocking_childDashboard);
         appBlocking_childDashboard.setOnClickListener(view -> openAppBlockingActivity());
     }
 

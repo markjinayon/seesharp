@@ -8,9 +8,10 @@
 
     <ImageView
         android:id="@+id/appIcon"
-        android:layout_width="75dp"
+        android:layout_width="17dp"
         android:layout_height="75dp"
         android:layout_weight="1"
+        android:paddingEnd="10dp"
         tools:srcCompat="@tools:sample/avatars" />
 
     <Switch
@@ -22,4 +23,5 @@
         android:minHeight="48dp"
         android:text="Switch"
         tools:ignore="UseSwitchCompatOrMaterialXml" />
+
 </LinearLayout>

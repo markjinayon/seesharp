@@ -6,55 +6,172 @@
     android:layout_height="match_parent"
     tools:context=".activities.parent.ParentDashboardActivity">
 
-    <LinearLayout
-        android:id="@+id/seesharp"
-        android:layout_width="409dp"
-        android:layout_height="81dp"
-        android:orientation="vertical"
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cardView"
+        android:layout_width="414dp"
+        android:layout_height="91dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <TextView
-            android:id="@+id/textView9"
+        <LinearLayout
+            android:id="@+id/seesharp"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:fontFamily="@font/bungee"
-            android:text="SEESHARP"
-            android:textAlignment="center"
-            android:textColor="@color/purple"
-            android:textSize="40sp" />
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
 
-    </LinearLayout>
+            <TextView
+                android:id="@+id/textView9"
+                android:layout_width="match_parent"
+                android:layout_height="91dp"
+                android:background="@color/transparent"
+                android:fontFamily="@font/bungee"
+                android:text="SEESHARP"
+                android:textAlignment="center"
+                android:textColor="@color/primary"
+                android:textSize="40sp" />
+
+        </LinearLayout>
+
+    </androidx.cardview.widget.CardView>
 
     <LinearLayout
-        android:id="@+id/linearLayout2"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
-        android:orientation="horizontal"
-        app:layout_constraintTop_toBottomOf="@+id/seesharp"
-        tools:layout_editor_absoluteX="-1dp">
+        android:layout_width="406dp"
+        android:layout_height="606dp"
+        android:layout_weight="1"
+        android:orientation="vertical"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/cardView">
 
-        <ImageView
-            android:id="@+id/user_image"
-            android:layout_width="wrap_content"
+        <androidx.cardview.widget.CardView
+            android:id="@+id/testcard1"
+            android:layout_width="382dp"
             android:layout_height="wrap_content"
+            android:layout_margin="10dp"
             android:layout_weight="1"
-            android:paddingTop="20dp"
-            tools:srcCompat="@tools:sample/avatars" />
+            app:cardBackgroundColor="#8B80F8"
+            app:cardCornerRadius="10dp"
+            app:cardElevation="10dp">
 
-        <TextView
-            android:id="@+id/user_name"
-            android:layout_width="wrap_content"
+            <LinearLayout
+                android:id="@+id/linearLayout1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:orientation="horizontal"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/seesharp">
+
+                <ImageView
+                    android:id="@+id/user_image1"
+                    android:layout_width="11dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:paddingTop="20dp"
+                    tools:srcCompat="@tools:sample/avatars" />
+
+                <TextView
+                    android:id="@+id/user_name1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:fontFamily="@font/roboto_bold"
+                    android:paddingTop="50dp"
+                    android:paddingRight="0dp"
+                    android:text="RD"
+                    android:textColor="@color/white"
+                    android:textSize="34sp" />
+
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/testcard2"
+            android:layout_width="384dp"
             android:layout_height="wrap_content"
+            android:layout_margin="10dp"
             android:layout_weight="1"
-            android:paddingTop="50dp"
-            android:paddingRight="70dp"
-            android:text=" Ronie Dave"
-            android:textColor="#000000"
-            android:textSize="34sp" />
+            app:cardBackgroundColor="#AF8EFF"
+            app:cardCornerRadius="10dp"
+            app:cardElevation="10dp">
 
+            <LinearLayout
+                android:id="@+id/linearLayout3"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:orientation="horizontal"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/seesharp">
+
+                <ImageView
+                    android:id="@+id/user_image2"
+                    android:layout_width="11dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:paddingTop="20dp"
+                    tools:srcCompat="@tools:sample/avatars" />
+
+                <TextView
+                    android:id="@+id/user_name2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:fontFamily="@font/roboto_bold"
+                    android:paddingTop="50dp"
+                    android:paddingRight="0dp"
+                    android:text="Jem"
+                    android:textColor="@color/white"
+                    android:textSize="34sp" />
+
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/testcard3"
+            android:layout_width="384dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:layout_weight="1"
+            app:cardBackgroundColor="#4C5A81"
+            app:cardCornerRadius="10dp"
+            app:cardElevation="10dp">
+
+            <LinearLayout
+                android:id="@+id/linearLayout4"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:orientation="horizontal"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/seesharp">
+
+                <ImageView
+                    android:id="@+id/user_image3"
+                    android:layout_width="11dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:paddingTop="20dp"
+                    tools:srcCompat="@tools:sample/avatars" />
+
+                <TextView
+                    android:id="@+id/user_name3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:fontFamily="@font/roboto_bold"
+                    android:paddingTop="50dp"
+                    android:paddingRight="0dp"
+                    android:text="Mark"
+                    android:textColor="@color/white"
+                    android:textSize="34sp" />
+
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
