@@ -19,7 +19,7 @@
         <TextView
             android:id="@+id/textView9"
             android:layout_width="match_parent"
-            android:layout_height="91dp"
+            android:layout_height="80dp"
             android:background="@color/transparent"
             android:fontFamily="@font/bungee"
             android:text="SEESHARP"
@@ -31,8 +31,8 @@
 
     <androidx.cardview.widget.CardView
         android:id="@+id/userCard"
-        android:layout_width="377dp"
-        android:layout_height="149dp"
+        android:layout_width="320dp"
+        android:layout_height="130dp"
         app:cardBackgroundColor="@color/purple_white"
         app:cardCornerRadius="20dp"
         app:cardPreventCornerOverlap="false"
@@ -77,10 +77,10 @@
 
     <LinearLayout
         android:id="@+id/linearLayout3"
-        android:layout_width="413dp"
+        android:layout_width="350dp"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:padding="10dp"
+        android:padding="8dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/userCard">
@@ -88,12 +88,12 @@
         <androidx.cardview.widget.CardView
             android:id="@+id/appBLocking_childDashboard"
             android:layout_width="0dp"
-            android:layout_height="170dp"
+            android:layout_height="150dp"
             android:layout_margin="10dp"
             android:layout_weight="1"
             app:cardBackgroundColor="#8B80F8"
             app:cardCornerRadius="10dp"
-            app:cardElevation="10dp">
+            app:cardElevation="5dp">
 
             <RelativeLayout
                 android:layout_width="match_parent"
@@ -105,7 +105,7 @@
                     android:layout_width="75dp"
                     android:layout_height="75dp"
                     android:layout_centerHorizontal="true"
-                    android:layout_marginTop="30dp"
+                    android:layout_marginTop="15dp"
                     app:srcCompat="@drawable/ic_baseline_app_blocking_24" />
 
                 <TextView
@@ -113,10 +113,10 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_below="@id/imageView6"
-                    android:layout_centerInParent="true"
+                    android:layout_centerHorizontal="true"
                     android:layout_marginTop="10dp"
                     android:fontFamily="@font/roboto_bold"
-                    android:text="APPLICATION BLOCKING"
+                    android:text="APPLICATION  BLOCKER"
                     android:textAlignment="center"
                     android:textColor="@color/white"
                     android:textSize="16sp" />
@@ -127,12 +127,12 @@
         <androidx.cardview.widget.CardView
             android:id="@+id/webFiltering_childDashboard"
             android:layout_width="0dp"
-            android:layout_height="170dp"
+            android:layout_height="150dp"
             android:layout_margin="10dp"
             android:layout_weight="1"
             app:cardBackgroundColor="#AF8EFF"
             app:cardCornerRadius="10dp"
-            app:cardElevation="10dp">
+            app:cardElevation="5dp">
 
             <RelativeLayout
                 android:layout_width="match_parent"
@@ -143,7 +143,7 @@
                     android:layout_width="75dp"
                     android:layout_height="75dp"
                     android:layout_centerHorizontal="true"
-                    android:layout_marginTop="30dp"
+                    android:layout_marginTop="15dp"
                     app:srcCompat="@drawable/ic_baseline_language_24" />
 
                 <TextView
@@ -164,11 +164,11 @@
 
     <LinearLayout
         android:id="@+id/linearLayout5"
-        android:layout_width="411dp"
-        android:layout_height="205dp"
+        android:layout_width="350dp"
+        android:layout_height="191dp"
         android:layout_weight="1"
         android:orientation="horizontal"
-        android:padding="10dp"
+        android:padding="8dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/linearLayout3">
@@ -176,12 +176,12 @@
         <androidx.cardview.widget.CardView
             android:id="@+id/screentimeLimit_childDashboard"
             android:layout_width="0dp"
-            android:layout_height="match_parent"
+            android:layout_height="150dp"
             android:layout_margin="10dp"
             android:layout_weight="1"
             app:cardBackgroundColor="#1E87FD"
             app:cardCornerRadius="10dp"
-            app:cardElevation="10dp">
+            app:cardElevation="5dp">
 
             <RelativeLayout
                 android:layout_width="match_parent"
@@ -192,7 +192,7 @@
                     android:layout_width="75dp"
                     android:layout_height="75dp"
                     android:layout_centerHorizontal="true"
-                    android:layout_marginTop="30dp"
+                    android:layout_marginTop="13dp"
                     app:srcCompat="@drawable/ic_baseline_access_time_24" />
 
                 <TextView
@@ -203,9 +203,10 @@
                     android:layout_centerHorizontal="true"
                     android:layout_marginTop="10dp"
                     android:fontFamily="@font/roboto_bold"
-                    android:text="SCREENTIME LIMIT"
+                    android:text="APPLICATION SCREENTIME LIMIT"
+                    android:textAlignment="center"
                     android:textColor="@color/white"
-                    android:textSize="16sp" />
+                    android:textSize="14sp" />
 
             </RelativeLayout>
         </androidx.cardview.widget.CardView>
@@ -213,12 +214,12 @@
         <androidx.cardview.widget.CardView
             android:id="@+id/aiAssistant_childDashboard"
             android:layout_width="0dp"
-            android:layout_height="match_parent"
+            android:layout_height="150dp"
             android:layout_margin="10dp"
             android:layout_weight="1"
             app:cardBackgroundColor="#4C5A81"
             app:cardCornerRadius="10dp"
-            app:cardElevation="10dp">
+            app:cardElevation="5dp">
 
             <RelativeLayout
                 android:layout_width="match_parent"
@@ -229,7 +230,7 @@
                     android:layout_width="75dp"
                     android:layout_height="75dp"
                     android:layout_centerHorizontal="true"
-                    android:layout_marginTop="30dp"
+                    android:layout_marginTop="20dp"
                     app:srcCompat="@drawable/ic_baseline_rule_24" />
 
                 <TextView
