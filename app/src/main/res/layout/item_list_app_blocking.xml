@@ -7,21 +7,28 @@
     android:orientation="horizontal">
 
     <ImageView
-        android:id="@+id/appIcon"
-        android:layout_width="17dp"
+        android:id="@+id/appIcon_appBlocking"
+        android:layout_width="75dp"
         android:layout_height="75dp"
+        android:layout_gravity="left|center_vertical"
         android:layout_weight="1"
-        android:paddingEnd="10dp"
         tools:srcCompat="@tools:sample/avatars" />
 
-    <Switch
-        android:id="@+id/appSwitch"
+    <TextView
+        android:id="@+id/appLabel_appBlocking"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_vertical"
+        android:layout_gravity="center|center_vertical"
+        android:layout_weight="1"
+        android:text="TextView" />
+
+    <Switch
+        android:id="@+id/appSwitch_appBlocking"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="right|center_vertical"
         android:layout_weight="1"
         android:minHeight="48dp"
-        android:text="Switch"
         tools:ignore="UseSwitchCompatOrMaterialXml" />
 
 </LinearLayout>

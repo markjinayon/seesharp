@@ -73,8 +73,8 @@ public class ApplicationBlockingAccessibilityService extends AccessibilityServic
     @Override
     public void onAccessibilityEvent(AccessibilityEvent accessibilityEvent) {
         String packageName = accessibilityEvent.getPackageName().toString();
-        Log.e(TAG, "onAccessibilityEvent: " + packageName);
-        Log.e(TAG, "blocked: " + user.blockedApplications.toString());
+//        Log.e(TAG, "onAccessibilityEvent: " + packageName);
+//        Log.e(TAG, "blocked: " + user.blockedApplications.toString());
         if (user != null && user.blockedApplications.contains(packageName)) {
             Intent startMain = new Intent(Intent.ACTION_MAIN);
             startMain.addCategory(Intent.CATEGORY_HOME);

@@ -41,6 +41,7 @@ public class ApplicationBlockingActivity extends AppCompatActivity {
     private Button enableAppBlocking_appBlocking;
     private ListView applicationList_appBlocking;
 
+    private ArrayList<String> last_installedApps;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,47 +67,42 @@ public class ApplicationBlockingActivity extends AppCompatActivity {
                     .child(firebaseUser.getUid())
                     .child("appBlockingState")
                     .setValue(DeviceHelper.isAccessibilityServiceEnabled(getApplicationContext(), ApplicationBlockingAccessibilityService.class))
-                    .addOnCompleteListener(task -> dataListener());
-        }
-    }
+                    .addOnCompleteListener(task -> {
 
-    public void dataListener() {
-        FirebaseUser firebaseUser = firebaseAuth.getCurrentUser();
+                    });
 
-        if (firebaseUser == null) {
-            Toast.makeText(ApplicationBlockingActivity.this, "Unable to retrieved user data! No user found.", Toast.LENGTH_LONG).show();
-            startActivity(new Intent(this, SignInActivity.class));
-            finish();
-            return;
-        }
+            last_installedApps = new ArrayList<>();
+            firebaseDatabase.getReference("users")
+                    .child(firebaseUser.getUid())
+                    .addValueEventListener(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+                            User user = snapshot.getValue(User.class);
 
-        firebaseDatabase.getReference("users")
-                .child(firebaseUser.getUid())
-                .addValueEventListener(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot snapshot) {
-                        User user = snapshot.getValue(User.class);
+                            if (user == null) return;
 
-                        if (user == null) return;
+                            if (user.appBlockingState) {
+                                accessibilityEnabled_appBlocking.setVisibility(View.VISIBLE);
+                                accessibilityDisabled_appBlocking.setVisibility(View.GONE);
+                            } else {
+                                accessibilityEnabled_appBlocking.setVisibility(View.GONE);
+                                accessibilityDisabled_appBlocking.setVisibility(View.VISIBLE);
+                            }
 
-                        if (user.appBlockingState) {
-                            accessibilityEnabled_appBlocking.setVisibility(View.VISIBLE);
-                            accessibilityDisabled_appBlocking.setVisibility(View.GONE);
-                        } else {
-                            accessibilityEnabled_appBlocking.setVisibility(View.GONE);
-                            accessibilityDisabled_appBlocking.setVisibility(View.VISIBLE);
+                            if (!last_installedApps.equals(user.installedApplications)) {
+                                AppBlockingListAdapter adapter = new AppBlockingListAdapter(getApplicationContext(), user.installedApplications, user.blockedApplications);
+                                applicationList_appBlocking.setAdapter(adapter);
+                                last_installedApps = user.installedApplications;
+                            }
+
+
                         }
 
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError error) {
 
-                        AppBlockingListAdapter adapter = new AppBlockingListAdapter(getApplicationContext(), user.installedApplications, user.blockedApplications);
-                        applicationList_appBlocking.setAdapter(adapter);
-
-                    }
-
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError error) {
-
-                    }
-                });
+                        }
+                    });
+        }
     }
 }
