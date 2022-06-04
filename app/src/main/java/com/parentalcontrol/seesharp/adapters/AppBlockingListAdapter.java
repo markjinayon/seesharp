@@ -1,5 +1,6 @@
 package com.parentalcontrol.seesharp.adapters;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -43,7 +44,7 @@ public class AppBlockingListAdapter extends ArrayAdapter<String> {
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.item_list_app_blocking, parent, false);
         }
 
-        Switch appSwitch = convertView.findViewById(R.id.appSwitch_appBlocking);
+        @SuppressLint("UseSwitchCompatOrMaterialCode") Switch appSwitch = convertView.findViewById(R.id.appSwitch_appBlocking);
         ImageView appIcon = convertView.findViewById(R.id.appIcon_appBlocking);
         TextView appLabel = convertView.findViewById(R.id.appLabel_appBlocking);
 
@@ -53,7 +54,7 @@ public class AppBlockingListAdapter extends ArrayAdapter<String> {
             appSwitch.setChecked(blockedApplications.contains(packageName));
 
             appSwitch.setOnCheckedChangeListener((compound, b) -> {
-                System.out.println("na click syaaa");
+                System.out.println("clicked");
                 if (b) {
                     blockedApplications.add(packageName);
                 } else {

@@ -18,7 +18,7 @@ import com.google.firebase.database.ValueEventListener;
 import com.parentalcontrol.seesharp.helper.DeviceHelper;
 import com.parentalcontrol.seesharp.model.User;
 
-public class ApplicationBlockingAccessibilityService extends AccessibilityService {
+public class SeeSharpAccessibilityService extends AccessibilityService {
 
     private static final String TAG = "MyAccessibilityService";
 
@@ -80,7 +80,7 @@ public class ApplicationBlockingAccessibilityService extends AccessibilityServic
             startMain.addCategory(Intent.CATEGORY_HOME);
             startMain.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(startMain);
-            Toast.makeText(ApplicationBlockingAccessibilityService.this, "You tried to open a blocked application!", Toast.LENGTH_LONG).show();
+            Toast.makeText(SeeSharpAccessibilityService.this, "You tried to open a blocked application!", Toast.LENGTH_LONG).show();
         }
 
     }
@@ -104,7 +104,7 @@ public class ApplicationBlockingAccessibilityService extends AccessibilityServic
                 .setValue(state)
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
-                        Toast.makeText(ApplicationBlockingAccessibilityService.this, message, Toast.LENGTH_LONG).show();
+                        Toast.makeText(SeeSharpAccessibilityService.this, message, Toast.LENGTH_LONG).show();
                         updateInstalledApplications();
                     }
                 });

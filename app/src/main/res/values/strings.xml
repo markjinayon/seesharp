@@ -1,5 +1,5 @@
 <resources>
     <string name="app_name">SeeSharp</string>
-    <string name="accessibility_service_label">Application Blocking</string>
-    <string name="accessibility_service_description">Accessibility description</string>
+    <string name="accessibility_service_label">SeeSharp Accessibility Service</string>
+    <string name="accessibility_service_description">Collects user activities using accessibility service</string>
 </resources>

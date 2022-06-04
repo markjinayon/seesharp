@@ -7,28 +7,21 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.parentalcontrol.seesharp.R;
-import com.parentalcontrol.seesharp.activities.SignInActivity;
 import com.parentalcontrol.seesharp.adapters.AppBlockingListAdapter;
 import com.parentalcontrol.seesharp.helper.DeviceHelper;
 import com.parentalcontrol.seesharp.model.User;
-import com.parentalcontrol.seesharp.services.accessibility.ApplicationBlockingAccessibilityService;
+import com.parentalcontrol.seesharp.services.accessibility.SeeSharpAccessibilityService;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
-import android.annotation.SuppressLint;
 import android.content.Intent;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.Switch;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -66,7 +59,7 @@ public class ApplicationBlockingActivity extends AppCompatActivity {
             firebaseDatabase.getReference("users")
                     .child(firebaseUser.getUid())
                     .child("appBlockingState")
-                    .setValue(DeviceHelper.isAccessibilityServiceEnabled(getApplicationContext(), ApplicationBlockingAccessibilityService.class))
+                    .setValue(DeviceHelper.isAccessibilityServiceEnabled(getApplicationContext(), SeeSharpAccessibilityService.class))
                     .addOnCompleteListener(task -> {
 
                     });

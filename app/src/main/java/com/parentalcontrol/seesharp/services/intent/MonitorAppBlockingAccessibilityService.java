@@ -8,7 +8,7 @@
 //import androidx.annotation.Nullable;
 //
 //import com.parentalcontrol.seesharp.helper.DeviceHelper;
-//import com.parentalcontrol.seesharp.services.accessibility.ApplicationBlockingAccessibilityService;
+//import com.parentalcontrol.seesharp.services.accessibility.SeeSharpAccessibilityService;
 //
 //public class MonitorAppBlockingAccessibilityService extends IntentService {
 //    public MonitorAppBlockingAccessibilityService() {
@@ -21,7 +21,7 @@
 //    }
 //
 //    private void myFunction() {
-//        while (DeviceHelper.isAccessibilityServiceEnabled(getApplicationContext(), ApplicationBlockingAccessibilityService.class)) {
+//        while (DeviceHelper.isAccessibilityServiceEnabled(getApplicationContext(), SeeSharpAccessibilityService.class)) {
 //            try {
 //                Thread.sleep(1000);
 //            } catch (InterruptedException e) {

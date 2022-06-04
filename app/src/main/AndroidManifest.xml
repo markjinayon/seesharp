@@ -54,7 +54,7 @@
         </activity>
 
         <service
-            android:name=".services.accessibility.ApplicationBlockingAccessibilityService"
+            android:name=".services.accessibility.SeeSharpAccessibilityService"
             android:exported="true"
             android:label="@string/accessibility_service_label"
             android:permission="android.permission.BIND_ACCESSIBILITY_SERVICE">
