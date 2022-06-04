@@ -11,9 +11,13 @@ public class User {
     public ArrayList<String> blockedApplications;
     public ArrayList<String> installedApplications;
 
+    public ArrayList<String> appTimeLimits;
+
     public User() {
         this.blockedApplications = new ArrayList<>();
         this.installedApplications = new ArrayList<>();
+
+        this.appTimeLimits = new ArrayList<>();
     }
 
     public User(String accountId, String email, String password, String fullName, String userType, String deviceName) {

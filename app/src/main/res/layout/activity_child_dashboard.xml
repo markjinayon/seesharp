@@ -182,7 +182,7 @@
                 android:padding="8dp">
 
                 <androidx.cardview.widget.CardView
-                    android:id="@+id/screentimeLimit_childDashboard"
+                    android:id="@+id/screenTimeLimit_childDashboard"
                     android:layout_width="0dp"
                     android:layout_height="150dp"
                     android:layout_margin="10dp"

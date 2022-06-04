@@ -163,7 +163,7 @@
         app:layout_constraintTop_toBottomOf="@+id/linearLayout3">
 
         <androidx.cardview.widget.CardView
-            android:id="@+id/screentimeLimit_childDashboard"
+            android:id="@+id/screenTimeLimit_childDashboard"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_margin="10dp"
