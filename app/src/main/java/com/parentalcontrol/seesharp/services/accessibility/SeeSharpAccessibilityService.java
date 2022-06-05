@@ -83,6 +83,8 @@ public class SeeSharpAccessibilityService extends AccessibilityService {
             Toast.makeText(SeeSharpAccessibilityService.this, "You tried to open a blocked application!", Toast.LENGTH_LONG).show();
         }
 
+        Log.e(TAG, hasTimeLimit(packageName)+"");
+
     }
 
     @Override
@@ -116,4 +118,17 @@ public class SeeSharpAccessibilityService extends AccessibilityService {
                 .child("installedApplications")
                 .setValue(DeviceHelper.getListOfInstalledApps(getApplicationContext()));
     }
+
+    public boolean hasTimeLimit(String packageName) {
+        if (user == null) return false;
+
+        for (String app: user.appTimeLimits) {
+            String[] data = app.split("::");
+            if (data[0].equals(packageName) && !data[1].equals("None")) return true;
+        }
+
+        return false;
+    }
+
+
 }
