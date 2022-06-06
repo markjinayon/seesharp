@@ -100,7 +100,7 @@ public class SeeSharpAccessibilityService extends AccessibilityService {
     }
 
     public void checkScreenTimeLimit(String packageName) {
-        if (hasTimeLimit(packageName)) {
+        if (!hasTimeLimit(packageName).isEmpty()) {
             Log.e(TAG, "Meron");
         }
     }
@@ -129,15 +129,15 @@ public class SeeSharpAccessibilityService extends AccessibilityService {
         return user != null && user.blockedApplications.contains(packageName);
     }
 
-    public boolean hasTimeLimit(String packageName) {
-        if (user == null) return false;
+    public String hasTimeLimit(String packageName) {
+        if (user == null) return "";
 
         for (String app: user.appTimeLimits) {
             String[] data = app.split("::");
-            if (data[0].equals(packageName) && !data[1].equals("None")) return true;
+            if (data[0].equals(packageName) && !data[1].equals("None")) return data[1];
         }
 
-        return false;
+        return "";
     }
 
     public void takeToHomeScreen() {
