@@ -75,15 +75,8 @@ public class SeeSharpAccessibilityService extends AccessibilityService {
         String packageName = accessibilityEvent.getPackageName().toString();
 //        Log.e(TAG, "onAccessibilityEvent: " + packageName);
 //        Log.e(TAG, "blocked: " + user.blockedApplications.toString());
-        if (user != null && user.blockedApplications.contains(packageName)) {
-            Intent startMain = new Intent(Intent.ACTION_MAIN);
-            startMain.addCategory(Intent.CATEGORY_HOME);
-            startMain.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            startActivity(startMain);
-            Toast.makeText(SeeSharpAccessibilityService.this, "You tried to open a blocked application!", Toast.LENGTH_LONG).show();
-        }
-
-        Log.e(TAG, hasTimeLimit(packageName)+"");
+        checkAppBlocking(packageName);
+        checkScreenTimeLimit(packageName);
 
     }
 
@@ -97,6 +90,19 @@ public class SeeSharpAccessibilityService extends AccessibilityService {
     public void onDestroy() {
         super.onDestroy();
         changeAppBlockingStatus(false, "Application blocking is now disabled");
+    }
+
+    public void checkAppBlocking(String packageName) {
+        if (isOnBlockedApps(packageName)) {
+            takeToHomeScreen();
+            Toast.makeText(SeeSharpAccessibilityService.this, "You tried to open a blocked application!", Toast.LENGTH_LONG).show();
+        }
+    }
+
+    public void checkScreenTimeLimit(String packageName) {
+        if (hasTimeLimit(packageName)) {
+            Log.e(TAG, "Meron");
+        }
     }
 
     public void changeAppBlockingStatus(boolean state, String message) {
@@ -119,6 +125,10 @@ public class SeeSharpAccessibilityService extends AccessibilityService {
                 .setValue(DeviceHelper.getListOfInstalledApps(getApplicationContext()));
     }
 
+    public boolean isOnBlockedApps(String packageName) {
+        return user != null && user.blockedApplications.contains(packageName);
+    }
+
     public boolean hasTimeLimit(String packageName) {
         if (user == null) return false;
 
@@ -130,5 +140,10 @@ public class SeeSharpAccessibilityService extends AccessibilityService {
         return false;
     }
 
-
+    public void takeToHomeScreen() {
+        Intent startMain = new Intent(Intent.ACTION_MAIN);
+        startMain.addCategory(Intent.CATEGORY_HOME);
+        startMain.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(startMain);
+    }
 }
