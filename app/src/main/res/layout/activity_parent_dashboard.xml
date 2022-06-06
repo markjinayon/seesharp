@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/purple_white"
     android:textAlignment="center"
     tools:context=".activities.parent.ParentDashboardActivity">
 
@@ -42,9 +43,9 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:fontFamily="@font/roboto_bold"
-            android:text="DEVICES"
+            android:text="Devices"
             android:textAlignment="center"
-            android:textColor="@color/black"
+            android:textColor="@color/light_black"
             android:textSize="24sp" />
     </LinearLayout>
 

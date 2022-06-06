@@ -4,12 +4,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/purple_white"
     tools:context=".activities.SignUpActivity">
 
     <ScrollView
         android:id="@+id/scrollView2"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="@color/purple_white"
         android:contentDescription="scrollViewContentDescription"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -19,7 +21,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/white"
+            android:background="@color/purple_white"
             android:orientation="vertical"
             android:padding="20dp"
             tools:context=".activities.SignInActivity">
@@ -32,13 +34,16 @@
                 android:fontFamily="@font/bungee"
                 android:text="SEESHARP"
                 android:textAlignment="center"
+                android:textColor="@color/primary"
                 android:textSize="40sp" />
 
             <TextView
                 android:id="@+id/textView2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Sign Up to continue"
+                android:fontFamily="@font/roboto_bold"
+                android:text="Sign up to continue"
+                android:textColor="@color/light_black"
                 android:textSize="18sp" />
 
             <LinearLayout
@@ -57,6 +62,7 @@
                     <com.google.android.material.textfield.TextInputEditText
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:fontFamily="@font/roboto"
                         android:hint="Email"
                         android:inputType="textEmailAddress"
                         android:minHeight="48dp" />
@@ -73,6 +79,7 @@
                     <com.google.android.material.textfield.TextInputEditText
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:fontFamily="@font/roboto"
                         android:hint="Password"
                         android:inputType="textPassword"
                         android:minHeight="48dp" />
@@ -89,6 +96,7 @@
                     <com.google.android.material.textfield.TextInputEditText
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:fontFamily="@font/roboto"
                         android:hint="Confirm Password"
                         android:inputType="textPassword"
                         android:minHeight="48dp" />
@@ -104,6 +112,7 @@
                     <com.google.android.material.textfield.TextInputEditText
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:fontFamily="@font/roboto"
                         android:hint="Full Name"
                         android:inputType="textPersonName"
                         android:minHeight="48dp" />
@@ -120,23 +129,28 @@
                         android:id="@+id/textView3"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Select user type" />
+                        android:fontFamily="@font/roboto_bold"
+                        android:text="Select user type"
+                        android:textColor="@color/light_black"
+                        android:textSize="16sp" />
 
                     <RadioButton
                         android:id="@+id/parent_signUp"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:buttonTint="@color/primary"
                         android:checked="true"
-                        android:text="Parent"
-                        android:buttonTint="@color/design_default_color_primary" />
+                        android:fontFamily="@font/roboto"
+                        android:text="Parent" />
 
                     <RadioButton
                         android:id="@+id/child_signUp"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:buttonTint="@color/primary"
                         android:checked="false"
-                        android:text="Child"
-                        android:buttonTint="@color/design_default_color_primary"/>
+                        android:fontFamily="@font/roboto"
+                        android:text="Child" />
 
                 </RadioGroup>
 
@@ -146,8 +160,11 @@
                     android:layout_height="wrap_content"
                     android:layout_margin="5dp"
                     android:layout_marginTop="5dp"
-                    android:background="@color/design_default_color_primary"
-                    android:text="Sign Up" />
+                    android:backgroundTint="@color/primary"
+                    android:fontFamily="@font/roboto_bold"
+                    android:text="Sign Up"
+                    android:textSize="16sp"
+                    app:cornerRadius="10dp" />
 
                 <Button
                     android:id="@+id/signIn_signUp"
@@ -158,8 +175,9 @@
                     android:layout_marginTop="5dp"
                     android:background="#00000000"
                     android:elevation="0dp"
+                    android:fontFamily="@font/roboto_bold"
                     android:text="Already have an account?"
-                    android:textColor="@color/design_default_color_primary" />
+                    android:textColor="@color/primary" />
 
 
             </LinearLayout>

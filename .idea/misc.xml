@@ -20,15 +20,17 @@
         <entry key="..\:/JEM FILES/4TH/SeeSharp/app/src/main/res/drawable/ic_brain_svgrepo_com.xml" value="0.1" />
         <entry key="..\:/JEM FILES/4TH/SeeSharp/app/src/main/res/drawable/ic_world_wide_web_svgrepo_com.xml" value="0.2555" />
         <entry key="..\:/JEM FILES/4TH/SeeSharp/app/src/main/res/font/poppins.xml" value="0.28020833333333334" />
+        <entry key="..\:/JEM FILES/4TH/SeeSharp/app/src/main/res/layout/activity_app_blocking.xml" value="0.264" />
         <entry key="..\:/JEM FILES/4TH/SeeSharp/app/src/main/res/layout/activity_application_blocking.xml" value="0.264" />
         <entry key="..\:/JEM FILES/4TH/SeeSharp/app/src/main/res/layout/activity_child_dashboard.xml" value="0.264" />
         <entry key="..\:/JEM FILES/4TH/SeeSharp/app/src/main/res/layout/activity_lock.xml" value="0.264" />
         <entry key="..\:/JEM FILES/4TH/SeeSharp/app/src/main/res/layout/activity_main.xml" value="0.25" />
         <entry key="..\:/JEM FILES/4TH/SeeSharp/app/src/main/res/layout/activity_parent_dashboard.xml" value="0.264" />
         <entry key="..\:/JEM FILES/4TH/SeeSharp/app/src/main/res/layout/activity_screen_time.xml" value="0.264" />
-        <entry key="..\:/JEM FILES/4TH/SeeSharp/app/src/main/res/layout/activity_sign_in.xml" value="0.22826086956521738" />
-        <entry key="..\:/JEM FILES/4TH/SeeSharp/app/src/main/res/layout/activity_sign_up.xml" value="0.22826086956521738" />
+        <entry key="..\:/JEM FILES/4TH/SeeSharp/app/src/main/res/layout/activity_sign_in.xml" value="0.264" />
+        <entry key="..\:/JEM FILES/4TH/SeeSharp/app/src/main/res/layout/activity_sign_up.xml" value="0.264" />
         <entry key="..\:/JEM FILES/4TH/SeeSharp/app/src/main/res/layout/item_list_app_blocking.xml" value="0.264" />
+        <entry key="..\:/JEM FILES/4TH/SeeSharp/app/src/main/res/layout/item_list_screen_time.xml" value="0.23052536231884058" />
         <entry key="..\:/JEM FILES/4TH/SeeSharp/app/src/main/res/layout/rounded_corners.xml" value="0.22282608695652173" />
         <entry key="..\:/JEM FILES/4TH/SeeSharp/app/src/main/res/layout/string.xml" value="0.22282608695652173" />
         <entry key="..\:/JEM FILES/4TH/SeeSharp/app/src/main/res/layout/testing.xml" value="0.24895833333333334" />
@@ -36,11 +38,7 @@
         <entry key="..\:/Users/jinay/Desktop/SeeSharp/app/src/main/res/layout/activity_application_blocking.xml" value="0.36666666666666664" />
         <entry key="..\:/Users/jinay/Desktop/SeeSharp/app/src/main/res/layout/activity_child_dashboard.xml" value="0.36666666666666664" />
         <entry key="..\:/Users/jinay/Desktop/SeeSharp/app/src/main/res/layout/activity_parent_dashboard.xml" value="0.36666666666666664" />
-        <entry key="..\:/Users/jinay/Desktop/SeeSharp/app/src/main/res/layout/activity_screen_time.xml" value="0.33" />
         <entry key="..\:/Users/jinay/Desktop/SeeSharp/app/src/main/res/layout/item_list_app_blocking.xml" value="0.33" />
-        <entry key="..\:/Users/jinay/Desktop/SeeSharp/app/src/main/res/layout/item_list_screen_time.xml" value="0.3367088607594937" />
-        <entry key="..\:/Users/jinay_3esz3d4/Desktop/seesharp/app/src/main/res/layout/activity_screen_time.xml" value="0.10989583333333333" />
-        <entry key="..\:/Users/jinay_3esz3d4/Desktop/seesharp/app/src/main/res/layout/item_list_screen_time.xml" value="0.10989583333333333" />
       </map>
     </option>
   </component>

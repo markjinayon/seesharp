@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/purple_white"
     android:elevation="30dp">
 
     <LinearLayout
@@ -47,8 +48,9 @@
                 android:layout_width="320dp"
                 android:layout_height="130dp"
                 android:layout_gravity="center"
-                app:cardBackgroundColor="@color/purple_white"
+                app:cardBackgroundColor="@color/white"
                 app:cardCornerRadius="20dp"
+                app:cardElevation="5dp"
                 app:cardPreventCornerOverlap="false">
 
                 <LinearLayout
@@ -75,8 +77,7 @@
                             android:layout_height="match_parent"
                             android:layout_weight="1"
                             android:fontFamily="@font/roboto_bold"
-                            android:paddingTop="50dp"
-                            android:paddingRight="0dp"
+                            android:gravity="center_vertical"
                             android:text="RONIE DAVE"
                             android:textColor="@color/light_black"
                             android:textSize="24sp" />

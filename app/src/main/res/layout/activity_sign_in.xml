@@ -4,9 +4,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".activities.SignInActivity"
+    android:background="@color/purple_white"
     android:orientation="vertical"
-    android:background="@color/white">
+    tools:context=".activities.SignInActivity">
 
 
     <LinearLayout
@@ -28,13 +28,16 @@
             android:fontFamily="@font/bungee"
             android:text="SEESHARP"
             android:textAlignment="center"
+            android:textColor="@color/primary"
             android:textSize="40sp" />
 
         <TextView
             android:id="@+id/textView2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Sign In to continue"
+            android:fontFamily="@font/roboto_bold"
+            android:text="Sign in to continue"
+            android:textColor="@color/light_black"
             android:textSize="18sp" />
 
         <LinearLayout
@@ -53,6 +56,7 @@
                 <com.google.android.material.textfield.TextInputEditText
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:fontFamily="@font/roboto"
                     android:hint="Email"
                     android:inputType="textEmailAddress"
                     android:minHeight="48dp" />
@@ -83,8 +87,9 @@
                 android:layout_margin="5dp"
                 android:background="#00000000"
                 android:elevation="0dp"
+                android:fontFamily="@font/roboto_bold"
                 android:text="Forgot Password?"
-                android:textColor="@color/design_default_color_primary" />
+                android:textColor="@color/primary" />
 
             <Button
                 android:id="@+id/signIn_signIn"
@@ -92,8 +97,11 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="5dp"
                 android:layout_marginTop="5dp"
-                android:background="@color/design_default_color_primary"
-                android:text="Sign In" />
+                android:backgroundTint="@color/primary"
+                android:fontFamily="@font/roboto_bold"
+                android:text="Sign In"
+                android:textSize="16sp"
+                app:cornerRadius="10dp" />
 
             <Button
                 android:id="@+id/signUp_signIn"
@@ -104,8 +112,9 @@
                 android:layout_marginTop="5dp"
                 android:background="#00000000"
                 android:elevation="0dp"
+                android:fontFamily="@font/roboto_bold"
                 android:text="New User? SIGN UP"
-                android:textColor="@color/design_default_color_primary" />
+                android:textColor="@color/primary" />
 
 
         </LinearLayout>
