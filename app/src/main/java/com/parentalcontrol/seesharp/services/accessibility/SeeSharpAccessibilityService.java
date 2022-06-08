@@ -2,6 +2,8 @@ package com.parentalcontrol.seesharp.services.accessibility;
 
 import android.accessibilityservice.AccessibilityService;
 import android.accessibilityservice.AccessibilityServiceInfo;
+import android.app.usage.UsageStats;
+import android.app.usage.UsageStatsManager;
 import android.content.Intent;
 import android.util.Log;
 import android.view.accessibility.AccessibilityEvent;
@@ -17,6 +19,8 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.parentalcontrol.seesharp.helper.DeviceHelper;
 import com.parentalcontrol.seesharp.model.User;
+
+import java.util.List;
 
 public class SeeSharpAccessibilityService extends AccessibilityService {
 
@@ -100,8 +104,20 @@ public class SeeSharpAccessibilityService extends AccessibilityService {
     }
 
     public void checkScreenTimeLimit(String packageName) {
-        if (!hasTimeLimit(packageName).isEmpty()) {
-            Log.e(TAG, "Meron");
+        String timeLimit = hasTimeLimit(packageName);
+
+        if (timeLimit.isEmpty()) return;
+
+        long appTimeLimit = Integer.parseInt(timeLimit) * 3600000L;
+        UsageStatsManager usageStatsManager = (UsageStatsManager) getSystemService(USAGE_STATS_SERVICE);
+        List<UsageStats> appList = usageStatsManager.queryUsageStats(UsageStatsManager.INTERVAL_DAILY,  System.currentTimeMillis() - 1000*3600*24,  System.currentTimeMillis());
+
+        for (UsageStats app: appList) {
+            if (app.getPackageName().equals(packageName)) System.out.println(app.getTotalTimeInForeground());
+            if (app.getPackageName().equals(packageName) && app.getTotalTimeInForeground() >= appTimeLimit) {
+                takeToHomeScreen();
+                Toast.makeText(SeeSharpAccessibilityService.this, "You tried to open a blocked application!", Toast.LENGTH_LONG).show();
+            }
         }
     }
 
@@ -134,7 +150,7 @@ public class SeeSharpAccessibilityService extends AccessibilityService {
 
         for (String app: user.appTimeLimits) {
             String[] data = app.split("::");
-            if (data[0].equals(packageName) && !data[1].equals("None")) return data[1];
+            if (data[0].equals(packageName) && !data[1].equals("None")) return data[1].replace(" hrs", "");
         }
 
         return "";

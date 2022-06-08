@@ -6,6 +6,9 @@
     <uses-permission
         android:name="android.permission.QUERY_ALL_PACKAGES"
         tools:ignore="QueryAllPackagesPermission" />
+    <uses-permission
+        android:name="android.permission.PACKAGE_USAGE_STATS"
+        tools:ignore="ProtectedPermissions" />
 
     <queries>
         <intent>
@@ -24,19 +27,22 @@
         android:theme="@style/Theme.MaterialComponents.Light.NoActionBar"
         tools:targetApi="31">
         <activity
+            android:name=".activities.parent.ConnectedDeviceActivity"
+            android:exported="false" />
+        <activity
             android:name=".activities.child.ScreenTimeActivity"
             android:exported="false" />
         <activity
             android:name=".activities.child.ApplicationBlockingActivity"
             android:exported="false"
-            android:launchMode="singleTop"/>
+            android:launchMode="singleTop" />
         <activity
             android:name=".activities.parent.ParentDashboardActivity"
             android:exported="false" />
         <activity
             android:name=".activities.child.ChildDashboardActivity"
             android:exported="false"
-            android:launchMode="singleTop"/>
+            android:launchMode="singleTop" />
         <activity
             android:name=".activities.SignUpActivity"
             android:exported="false" />
@@ -65,11 +71,9 @@
             <meta-data
                 android:name="android.accessibilityservice"
                 android:resource="@xml/accessibility_service_config" />
-        </service>
-<!--        <service-->
-<!--            android:name=".services.intent.MonitorAppBlockingAccessibilityService"-->
-<!--            android:exported="true" />-->
-
+        </service> <!-- <service -->
+        <!-- android:name=".services.intent.MonitorAppBlockingAccessibilityService" -->
+        <!-- android:exported="true" /> -->
         <meta-data
             android:name="preloaded_fonts"
             android:resource="@array/preloaded_fonts" />

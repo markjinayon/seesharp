@@ -7,7 +7,6 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
-import android.widget.SimpleCursorAdapter;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -27,6 +26,12 @@ public class ScreenTimeListAdapter extends ArrayAdapter<String> {
     FirebaseUser firebaseUser;
 
     ArrayList<String> appTimeLimits;
+
+    static class ViewHolder {
+        public TextView appLabel;
+        public ImageView appIcon;
+        Spinner spinner;
+    }
 
     public ScreenTimeListAdapter(@NonNull Context context, @NonNull ArrayList<String> arrayList) {
         super(context, R.layout.item_list_screen_time, arrayList);
@@ -49,24 +54,28 @@ public class ScreenTimeListAdapter extends ArrayAdapter<String> {
 
         if (convertView == null) {
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.item_list_screen_time, null);
+
+            ViewHolder viewHolder = new ViewHolder();
+            viewHolder.appLabel = convertView.findViewById(R.id.appLabel_screenTime);
+            viewHolder.appIcon = convertView.findViewById(R.id.appIcon_screenTime);
+            viewHolder.spinner = convertView.findViewById(R.id.spinner_screenTime);
+
+            convertView.setTag(viewHolder);
         }
 
-        TextView appLabel = convertView.findViewById(R.id.appLabel_screenTime);
-        ImageView appIcon = convertView.findViewById(R.id.appIcon_screenTime);
-        Spinner spinner = convertView.findViewById(R.id.spinner_screenTime);
-
         try {
-            appIcon.setImageDrawable(getContext().getPackageManager().getApplicationIcon(packageName));
-            appLabel.setText(getContext().getPackageManager().getApplicationLabel(getContext().getPackageManager().getApplicationInfo(packageName, 0)).toString());
-            selectValue(spinner, timeLimit);
+            ViewHolder viewHolder = (ViewHolder) convertView.getTag();
+            viewHolder.appIcon.setImageDrawable(getContext().getPackageManager().getApplicationIcon(packageName));
+            viewHolder.appLabel.setText(getContext().getPackageManager().getApplicationLabel(getContext().getPackageManager().getApplicationInfo(packageName, 0)).toString());
+            selectValue(viewHolder.spinner, timeLimit);
 
-            int selectedPosition = spinner.getSelectedItemPosition();
-            spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            int selectedPosition = viewHolder.spinner.getSelectedItemPosition();
+            viewHolder.spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                 @Override
                 public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                     if (firebaseUser != null && i != selectedPosition) {
                         while (appTimeLimits.remove(value)) {}
-                        appTimeLimits.add(packageName+"::"+spinner.getSelectedItem().toString());
+                        appTimeLimits.add(packageName+"::"+viewHolder.spinner.getSelectedItem().toString());
                         firebaseDatabase.getReference("users")
                                 .child(firebaseUser.getUid())
                                 .child("appTimeLimits")
@@ -80,7 +89,7 @@ public class ScreenTimeListAdapter extends ArrayAdapter<String> {
                 }
             });
         } catch (Exception e) {
-            e.printStackTrace();
+            //e.printStackTrace();
         }
 
         return convertView;
