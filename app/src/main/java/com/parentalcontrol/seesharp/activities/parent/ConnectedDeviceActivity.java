@@ -11,13 +11,18 @@ import com.parentalcontrol.seesharp.model.User;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 public class ConnectedDeviceActivity extends AppCompatActivity {
 
     private TextView userName;
+    private ImageView userImage;
+    private CardView appBlocking_connectedDevice, webFiltering_connectedDevice, screenTimeLimit_connectedDevice, aiAssistant_connectedDevice;
 
     private FirebaseAuth firebaseAuth;
     private FirebaseDatabase firebaseDatabase;
@@ -37,13 +42,23 @@ public class ConnectedDeviceActivity extends AppCompatActivity {
         firebaseUser = firebaseAuth.getCurrentUser();
 
         userName = findViewById(R.id.userName);
+        userImage = findViewById(R.id.userImage);
+
+        appBlocking_connectedDevice = findViewById(R.id.appBLocking_connectedDevice);
+        appBlocking_connectedDevice.setOnClickListener(view -> openBlockedAppsActivity(accountId));
 
         firebaseDatabase.getReference("users").child(accountId).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 connectedUserData = snapshot.getValue(User.class);
 
+                if (connectedUserData == null) return;
+
                 userName.setText(connectedUserData.fullName);
+
+                if (connectedUserData.profilePic.isEmpty()) {
+                    userImage.setBackgroundResource(R.drawable.ic_baseline_account_circle_24);
+                }
             }
 
             @Override
@@ -51,5 +66,11 @@ public class ConnectedDeviceActivity extends AppCompatActivity {
 
             }
         });
+    }
+
+    public void openBlockedAppsActivity(String accountId) {
+        Intent intent = new Intent(this, BlockedApplicationsActivity.class);
+        intent.putExtra("accountId", accountId);
+        startActivity(intent);
     }
 }

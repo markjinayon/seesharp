@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginHorizontal="15dp"
+        android:layout_marginVertical="8dp"
+        android:layout_weight="1"
+        app:cardBackgroundColor="#FFFFFF"
+        app:cardCornerRadius="10dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/appLabel_blockedApp"
+                android:layout_width="151dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:fontFamily="@font/roboto_bold"
+                android:gravity="center_vertical"
+                android:paddingStart="10dp"
+                android:text="Textview"
+                android:textAlignment="viewStart"
+                android:textColor="@color/light_black"
+                android:textSize="16sp" />
+
+            <Switch
+                android:id="@+id/appSwitch_blockedApp"
+                android:layout_width="wrap_content"
+                android:layout_height="69dp"
+                android:layout_gravity="right|center_vertical"
+                android:layout_weight="1"
+                android:minHeight="48dp" />
+
+        </LinearLayout>
+
+    </androidx.cardview.widget.CardView>
+</LinearLayout>

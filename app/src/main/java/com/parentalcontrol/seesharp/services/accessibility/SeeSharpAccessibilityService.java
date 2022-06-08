@@ -79,6 +79,7 @@ public class SeeSharpAccessibilityService extends AccessibilityService {
         String packageName = accessibilityEvent.getPackageName().toString();
 //        Log.e(TAG, "onAccessibilityEvent: " + packageName);
 //        Log.e(TAG, "blocked: " + user.blockedApplications.toString());
+        if (user == null) return;
         checkAppBlocking(packageName);
         checkScreenTimeLimit(packageName);
 
