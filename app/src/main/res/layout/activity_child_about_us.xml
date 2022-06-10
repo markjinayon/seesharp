@@ -82,7 +82,7 @@
                     android:layout_marginVertical="10dp"
                     android:fontFamily="@font/roboto"
                     android:lineSpacingExtra="8sp"
-                    android:text="SeeSharp is an AI-powered Parental Control Application that can monitor the child’s online activities. With the help of Artificial Intelligence such as Deep Learning and Natural Language Processing that will be integrated in the application. The parents or guardians will be able to provide a healthy, stress-free, and child-friendly environment for their children on digital platforms."
+                    android:text="SeeSharp is an AI-powered Parental Control Application that can monitor the child’s online activities. With the help of Artificial Intelligence such as Deep Learning and Natural Language Processing that will be integrated in the application, the parents or guardians will be able to provide a healthy, stress-free, and child-friendly environment for their children on digital platforms."
                     android:textColor="@color/light_black"
                     android:textSize="20sp" />
             </LinearLayout>
