@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/purple_white"
-    tools:context=".activities.child.ChildEditProfileActivity">
+    tools:context=".activities.parent.ParentEditProfileActivity">
 
     <LinearLayout
         android:id="@+id/seesharp"
@@ -49,32 +49,8 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/seesharp">
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="horizontal">
-
-            <ImageView
-                android:id="@+id/imageView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                tools:srcCompat="@tools:sample/avatars" />
-
-            <Button
-                android:id="@+id/button8"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginHorizontal="15dp"
-                android:layout_weight="1"
-                android:backgroundTint="@color/primary"
-                android:fontFamily="@font/roboto_bold"
-                android:text="Change photo"
-                app:cornerRadius="10dp" />
-        </LinearLayout>
-
         <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/fullName_childEditProfile"
+            android:id="@+id/fullName_parentEditProfile"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -86,14 +62,14 @@
                 android:layout_height="wrap_content"
                 android:background="@color/white"
                 android:fontFamily="@font/roboto"
-                android:hint="Ronie Dave"
+                android:hint="Maui Baluyot"
                 android:inputType="textPersonName"
                 android:minHeight="48dp" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/password_childEditProfile"
+            android:id="@+id/password_parentEditProfile"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -113,7 +89,7 @@
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/confirmPassword_childEditProfile"
+            android:id="@+id/confirmPassword_parentEditProfile"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -144,5 +120,4 @@
             android:text="save"
             app:cornerRadius="10dp" />
     </LinearLayout>
-
 </androidx.constraintlayout.widget.ConstraintLayout>
