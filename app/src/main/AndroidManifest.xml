@@ -27,6 +27,15 @@
         android:theme="@style/Theme.MaterialComponents.Light.NoActionBar"
         tools:targetApi="31">
         <activity
+            android:name=".ChildEditProfileActivity"
+            android:exported="false" />
+        <activity
+            android:name=".EditProfileActivity"
+            android:exported="false" />
+        <activity
+            android:name=".PinLockscreenActivity"
+            android:exported="false" />
+        <activity
             android:name=".activities.parent.CheckScreenTimeActivity"
             android:exported="false" />
         <activity
