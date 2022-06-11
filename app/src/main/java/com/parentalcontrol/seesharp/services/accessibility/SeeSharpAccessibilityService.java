@@ -15,6 +15,11 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
+import com.google.android.gms.safetynet.SafeBrowsingThreat;
+import com.google.android.gms.safetynet.SafetyNet;
+import com.google.android.gms.safetynet.SafetyNetApi;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Tasks;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -28,6 +33,8 @@ import com.parentalcontrol.seesharp.model.User;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Executor;
 
 public class SeeSharpAccessibilityService extends AccessibilityService {
 
@@ -51,6 +58,12 @@ public class SeeSharpAccessibilityService extends AccessibilityService {
         info.flags = AccessibilityServiceInfo.FLAG_REPORT_VIEW_IDS | AccessibilityServiceInfo.FLAG_RETRIEVE_INTERACTIVE_WINDOWS;
         setServiceInfo(info);
 
+        try {
+            Tasks.await(SafetyNet.getClient(this).initSafeBrowsing());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
         firebaseAuth = FirebaseAuth.getInstance();
         firebaseDatabase = FirebaseDatabase.getInstance();
 
@@ -72,7 +85,8 @@ public class SeeSharpAccessibilityService extends AccessibilityService {
                         user = snapshot.getValue(User.class);
                         if (user == null) return;
                         if (!user.appBlockingState) {
-                            changeAppBlockingStatus(true, "Application blocking is now enabled");
+                            changeAppBlockingStatus(true, "Accessibility service is now enabled");
+                            changeAppTimeLimitStatus(true, "");
                         }
                     }
 
@@ -105,6 +119,8 @@ public class SeeSharpAccessibilityService extends AccessibilityService {
         if (accessibilityEvent.getPackageName() == null || user == null) return;
 
         String packageName = accessibilityEvent.getPackageName().toString();
+
+        if (!user.installedApplications.contains(packageName)) return;
 
         if (user.appBlockingState) {
             checkAppBlocking(packageName);
@@ -158,8 +174,12 @@ public class SeeSharpAccessibilityService extends AccessibilityService {
 
     private void analyzeCapturedUrl(String capturedUrl, String browserPackage) {
         String redirectUrl = "https://www.youtube.com/watch?v=dQw4w9WgXcQ";
-        if (capturedUrl.contains("facebook.com")) {
-            performRedirect(redirectUrl, browserPackage);
+        String[] keywords = {"sex", "porn", "xxx", "hentai", "xvid", "nsfw"};
+
+        for (String word: keywords) {
+            if (capturedUrl.contains(word) && (capturedUrl.contains(".net") || capturedUrl.contains(".com"))) {
+                performRedirect(redirectUrl, browserPackage);
+            }
         }
     }
 
@@ -208,7 +228,7 @@ public class SeeSharpAccessibilityService extends AccessibilityService {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        changeAppBlockingStatus(false, "Application blocking is now disabled");
+        changeAppBlockingStatus(false, "Accessibility service is now disabled");
     }
 
     public void checkAppBlocking(String packageName) {
@@ -231,7 +251,7 @@ public class SeeSharpAccessibilityService extends AccessibilityService {
             if (app.getPackageName().equals(packageName)) System.out.println(app.getTotalTimeInForeground());
             if (app.getPackageName().equals(packageName) && app.getTotalTimeInForeground() >= appTimeLimit) {
                 takeToHomeScreen();
-                Toast.makeText(SeeSharpAccessibilityService.this, "You tried to open a blocked application!", Toast.LENGTH_LONG).show();
+                Toast.makeText(SeeSharpAccessibilityService.this, "Application already reached its time limit!", Toast.LENGTH_LONG).show();
             }
         }
     }

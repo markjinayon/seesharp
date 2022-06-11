@@ -21,6 +21,8 @@ public class User {
 
     public String pin;
 
+    public boolean webFilteringState;
+
     public User() {
         this.installedApplications = new ArrayList<>();
 
@@ -33,6 +35,8 @@ public class User {
         this.connectedDevices = new ArrayList<>();
 
         this.pin = "1234";
+
+        this.webFilteringState = false;
     }
 
     public User(String accountId, String email, String password, String fullName, String userType, String deviceName) {
@@ -44,11 +48,13 @@ public class User {
         this.userType = userType;
         this.deviceName = deviceName;
         this.appBlockingState = false;
+        this.appTimeLimitState = false;
         this.blockedApplications = new ArrayList<>();
         this.installedApplications = new ArrayList<>();
         this.appTimeLimits = new ArrayList<>();
         this.connectedDevices = new ArrayList<>();
         this.pin = StringHelper.generatePin();
+        this.webFilteringState = false;
     }
 
     @NonNull
