@@ -27,40 +27,31 @@
         android:theme="@style/Theme.MaterialComponents.Light.NoActionBar"
         tools:targetApi="31">
         <activity
-            android:name=".ParentAboutUsActivity"
+            android:name=".activities.parent.ParentAboutUsActivity"
             android:exported="false" />
         <activity
-            android:name=".ChildAboutUsActivity"
+            android:name=".activities.child.ChildAboutUsActivity"
             android:exported="false" />
         <activity
-            android:name=".ParentConfirmPinActivity"
+            android:name=".activities.child.ChildConfirmPinActivity"
             android:exported="false" />
         <activity
-            android:name=".ChildConfirmPinActivity"
+            android:name=".activities.parent.NotificationsActivity"
             android:exported="false" />
         <activity
-            android:name=".NotificationsActivity"
+            android:name=".activities.parent.ParentEditProfileActivity"
             android:exported="false" />
         <activity
-            android:name=".ParentChangePinActivity"
+            android:name=".activities.child.GetIdActivity"
             android:exported="false" />
         <activity
-            android:name=".ParentEditProfileActivity"
+            android:name=".activities.child.ChildChangePinActivity"
             android:exported="false" />
         <activity
-            android:name=".GetIdActivity"
+            android:name=".activities.child.ChildEditProfileActivity"
             android:exported="false" />
         <activity
-            android:name=".ChildChangePinActivity"
-            android:exported="false" />
-        <activity
-            android:name=".ChildEditProfileActivity"
-            android:exported="false" />
-        <activity
-            android:name=".EditProfileActivity"
-            android:exported="false" />
-        <activity
-            android:name=".PinLockscreenActivity"
+            android:name=".activities.child.PinLockscreenActivity"
             android:exported="false" />
         <activity
             android:name=".activities.parent.CheckScreenTimeActivity"

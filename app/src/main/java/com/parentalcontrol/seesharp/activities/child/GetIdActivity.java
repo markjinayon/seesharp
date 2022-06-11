@@ -4,6 +4,8 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
 
+import com.parentalcontrol.seesharp.R;
+
 public class GetIdActivity extends AppCompatActivity {
 
     @Override

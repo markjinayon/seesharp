@@ -2,6 +2,8 @@ package com.parentalcontrol.seesharp.model;
 
 import androidx.annotation.NonNull;
 
+import com.parentalcontrol.seesharp.helper.StringHelper;
+
 import java.util.ArrayList;
 
 public class User {
@@ -9,17 +11,28 @@ public class User {
 
     public ArrayList<String> connectedDevices;
 
-    public boolean appBlockingState;
-    public ArrayList<String> blockedApplications;
     public ArrayList<String> installedApplications;
 
+    public boolean appBlockingState;
+    public ArrayList<String> blockedApplications;
+
     public ArrayList<String> appTimeLimits;
+    public boolean appTimeLimitState;
+
+    public String pin;
 
     public User() {
-        this.blockedApplications = new ArrayList<>();
         this.installedApplications = new ArrayList<>();
+
+        this.appBlockingState = false;
+        this.blockedApplications = new ArrayList<>();
+
+        this.appTimeLimitState = false;
         this.appTimeLimits = new ArrayList<>();
+
         this.connectedDevices = new ArrayList<>();
+
+        this.pin = "1234";
     }
 
     public User(String accountId, String email, String password, String fullName, String userType, String deviceName) {
@@ -35,6 +48,7 @@ public class User {
         this.installedApplications = new ArrayList<>();
         this.appTimeLimits = new ArrayList<>();
         this.connectedDevices = new ArrayList<>();
+        this.pin = StringHelper.generatePin();
     }
 
     @NonNull

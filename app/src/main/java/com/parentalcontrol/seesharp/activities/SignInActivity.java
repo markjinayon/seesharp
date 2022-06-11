@@ -10,6 +10,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.parentalcontrol.seesharp.R;
 import com.parentalcontrol.seesharp.activities.child.ChildDashboardActivity;
+import com.parentalcontrol.seesharp.activities.child.PinLockscreenActivity;
 import com.parentalcontrol.seesharp.activities.parent.ParentDashboardActivity;
 import com.parentalcontrol.seesharp.model.User;
 
@@ -147,7 +148,10 @@ public class SignInActivity extends AppCompatActivity {
                             if (user.userType.equals("Parent")) {
                                 openParentDashboardActivity();
                             } else {
-                                openChildDashboardActivity();
+                                if (!user.pin.isEmpty()) {
+                                    openLockScreenActivity(user.pin);
+                                }
+                                //openChildDashboardActivity();
                             }
                         } else {
                             Toast.makeText(SignInActivity.this, "Unable to retrieved user data!", Toast.LENGTH_LONG).show();
@@ -170,6 +174,12 @@ public class SignInActivity extends AppCompatActivity {
     public void openParentDashboardActivity() {
         startActivity(new Intent(this, ParentDashboardActivity.class));
         finish();
+    }
+
+    public void openLockScreenActivity(String pin) {
+        Intent intent = new Intent(this, PinLockscreenActivity.class);
+        intent.putExtra("pin", pin);
+        startActivity(intent);
     }
 
     public void openChildDashboardActivity() {

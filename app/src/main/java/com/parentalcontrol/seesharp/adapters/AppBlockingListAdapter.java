@@ -27,6 +27,13 @@ public class AppBlockingListAdapter extends ArrayAdapter<String> {
 
     ArrayList<String> blockedApplications;
 
+    static class ViewHolder {
+        ImageView appIcon;
+        TextView appLabel;
+        @SuppressLint("UseSwitchCompatOrMaterialCode")
+        Switch appSwitch;
+    }
+
     public AppBlockingListAdapter(@NonNull Context context, ArrayList<String> arrayList, ArrayList<String> blockedApplications) {
         super(context, R.layout.item_list_app_blocking, arrayList);
         this.blockedApplications = blockedApplications;
@@ -42,18 +49,24 @@ public class AppBlockingListAdapter extends ArrayAdapter<String> {
 
         if (convertView == null) {
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.item_list_app_blocking, parent, false);
+
+            ViewHolder viewHolder = new ViewHolder();
+            viewHolder.appSwitch = convertView.findViewById(R.id.appSwitch_appBlocking);
+            viewHolder.appIcon = convertView.findViewById(R.id.appIcon_appBlocking);
+            viewHolder.appLabel = convertView.findViewById(R.id.appLabel_appBlocking);
+
+            convertView.setTag(viewHolder);
         }
 
-        @SuppressLint("UseSwitchCompatOrMaterialCode") Switch appSwitch = convertView.findViewById(R.id.appSwitch_appBlocking);
-        ImageView appIcon = convertView.findViewById(R.id.appIcon_appBlocking);
-        TextView appLabel = convertView.findViewById(R.id.appLabel_appBlocking);
+        ViewHolder viewHolder = (ViewHolder) convertView.getTag();
 
         try {
-            appIcon.setImageDrawable(getContext().getPackageManager().getApplicationIcon(packageName));
-            appLabel.setText(getContext().getPackageManager().getApplicationLabel(getContext().getPackageManager().getApplicationInfo(packageName, 0)).toString());
-            appSwitch.setChecked(blockedApplications.contains(packageName));
+            viewHolder.appIcon.setImageDrawable(getContext().getPackageManager().getApplicationIcon(packageName));
+            viewHolder.appLabel.setText(getContext().getPackageManager().getApplicationLabel(getContext().getPackageManager().getApplicationInfo(packageName, 0)).toString());
+            viewHolder.appSwitch.setOnCheckedChangeListener(null);
+            viewHolder.appSwitch.setChecked(blockedApplications.contains(packageName));
 
-            appSwitch.setOnCheckedChangeListener((compound, b) -> {
+            viewHolder.appSwitch.setOnCheckedChangeListener((compound, b) -> {
                 System.out.println("clicked");
                 if (b) {
                     blockedApplications.add(packageName);
@@ -67,7 +80,7 @@ public class AppBlockingListAdapter extends ArrayAdapter<String> {
                         .setValue(blockedApplications);
             });
         } catch (Exception e) {
-            e.printStackTrace();
+
         }
 
         return  convertView;

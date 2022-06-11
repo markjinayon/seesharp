@@ -18,6 +18,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.parentalcontrol.seesharp.activities.SignInActivity;
 import com.parentalcontrol.seesharp.activities.child.ChildDashboardActivity;
+import com.parentalcontrol.seesharp.activities.child.PinLockscreenActivity;
 import com.parentalcontrol.seesharp.activities.parent.ParentDashboardActivity;
 import com.parentalcontrol.seesharp.model.User;
 
@@ -47,7 +48,10 @@ public class MainActivity extends AppCompatActivity {
                                 if (user.userType.equals("Parent")) {
                                     openParentDashboardActivity();
                                 } else {
-                                    openChildDashboardActivity();
+                                    if (!user.pin.isEmpty()) {
+                                        openLockScreenActivity(user.pin);
+                                    }
+                                    //openChildDashboardActivity();
                                 }
                             }
                         }
@@ -65,6 +69,12 @@ public class MainActivity extends AppCompatActivity {
         progressBar_main.setVisibility(View.GONE);
         startActivity(new Intent(this, SignInActivity.class));
         finish();
+    }
+
+    public void openLockScreenActivity(String pin) {
+        Intent intent = new Intent(this, PinLockscreenActivity.class);
+        intent.putExtra("pin", pin);
+        startActivity(intent);
     }
 
     public void openParentDashboardActivity() {

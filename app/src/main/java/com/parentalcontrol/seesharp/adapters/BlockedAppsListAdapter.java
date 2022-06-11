@@ -17,7 +17,7 @@ import com.parentalcontrol.seesharp.R;
 import java.util.ArrayList;
 
 public class BlockedAppsListAdapter extends ArrayAdapter<String> {
-    private ArrayList<String> installedApps, blockedApps;
+    private ArrayList<String> blockedApps;
     private String accountId;
 
     FirebaseDatabase firebaseDatabase;
@@ -30,9 +30,7 @@ public class BlockedAppsListAdapter extends ArrayAdapter<String> {
     public BlockedAppsListAdapter(@NonNull Context context, String accountId, ArrayList<String> installedApps, ArrayList<String> blockedApps) {
         super(context, R.layout.item_list_blocked_app, installedApps);
 
-        this.installedApps = installedApps;
         this.blockedApps = blockedApps;
-
         this.accountId = accountId;
 
         firebaseDatabase = FirebaseDatabase.getInstance();
@@ -51,7 +49,7 @@ public class BlockedAppsListAdapter extends ArrayAdapter<String> {
             convertView.setTag(viewHolder);
         }
 
-        String packageName = installedApps.get(position);
+        String packageName = getItem(position);
 
         try {
             ViewHolder viewHolder = (ViewHolder) convertView.getTag();

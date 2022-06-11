@@ -67,6 +67,7 @@ public class ScreenTimeListAdapter extends ArrayAdapter<String> {
             ViewHolder viewHolder = (ViewHolder) convertView.getTag();
             viewHolder.appIcon.setImageDrawable(getContext().getPackageManager().getApplicationIcon(packageName));
             viewHolder.appLabel.setText(getContext().getPackageManager().getApplicationLabel(getContext().getPackageManager().getApplicationInfo(packageName, 0)).toString());
+            viewHolder.spinner.setOnItemSelectedListener(null);
             selectValue(viewHolder.spinner, timeLimit);
 
             int selectedPosition = viewHolder.spinner.getSelectedItemPosition();
