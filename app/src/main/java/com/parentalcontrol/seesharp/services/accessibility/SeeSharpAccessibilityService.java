@@ -129,9 +129,11 @@ public class SeeSharpAccessibilityService extends AccessibilityService {
             checkScreenTimeLimit(packageName);
         }
 
-        for (String app: packageNames()) {
-            if (app.equals(packageName)) {
-                checkWebFilter(accessibilityEvent, packageName);
+        if (user.webFilteringState) {
+            for (String app: packageNames()) {
+                if (app.equals(packageName)) {
+                    checkWebFilter(accessibilityEvent, packageName);
+                }
             }
         }
 

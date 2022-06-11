@@ -20,18 +20,25 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 public class ChildDashboardActivity extends AppCompatActivity {
 
-    private CardView appBlocking_childDashboard, screenTimeLimit_childDashboard;
+    private CardView appBlocking_childDashboard, screenTimeLimit_childDashboard, webFiltering_childDashboard;
 
     private Button settings_childDashboard;
+
+    FirebaseUser firebaseUser;
+    FirebaseDatabase firebaseDatabase;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_child_dashboard);
+
+        firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+        firebaseDatabase = FirebaseDatabase.getInstance();
 
         appBlocking_childDashboard = findViewById(R.id.appBLocking_childDashboard);
         appBlocking_childDashboard.setOnClickListener(view -> openAppBlockingActivity());
@@ -39,11 +46,13 @@ public class ChildDashboardActivity extends AppCompatActivity {
         screenTimeLimit_childDashboard = findViewById(R.id.screenTimeLimit_childDashboard);
         screenTimeLimit_childDashboard.setOnClickListener(view -> openScreenTimeActivity());
 
+        webFiltering_childDashboard = findViewById(R.id.webFiltering_childDashboard);
+        webFiltering_childDashboard.setOnClickListener(view -> changeWebFilteringState());
+
         settings_childDashboard = findViewById(R.id.settings_childDashboard);
         settings_childDashboard.setOnClickListener(view -> openSettings());
 
-        FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
-        FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
+
 
         if (firebaseUser == null) {
             startActivity(new Intent(this, SignInActivity.class));
@@ -68,6 +77,10 @@ public class ChildDashboardActivity extends AppCompatActivity {
                             Toast.makeText(getApplicationContext(), "You must enable SeeSharpAccessibilityService!", Toast.LENGTH_LONG).show();
                             startActivity(new Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_NO_HISTORY));
                         }
+
+                        ((TextView) findViewById(R.id.userName)).setText(user.fullName);
+
+                        ((TextView) findViewById(R.id.webFilteringState)).setText(user.webFilteringState+"");
                     }
 
                     @Override
@@ -76,6 +89,22 @@ public class ChildDashboardActivity extends AppCompatActivity {
                     }
                 });
 
+    }
+
+    private void changeWebFilteringState() {
+        String state = ((TextView) findViewById(R.id.webFilteringState)).getText().toString();
+        boolean newState = !state.equals("true");
+        firebaseDatabase.getReference("users")
+                .child(firebaseUser.getUid())
+                .child("webFilteringState")
+                .setValue(newState)
+                .addOnSuccessListener(task -> {
+                    if (newState) {
+                        Toast.makeText(getApplicationContext(), "Web filtering is now enabled.", Toast.LENGTH_LONG).show();
+                    } else {
+                        Toast.makeText(getApplicationContext(), "Web filtering is now disabled.", Toast.LENGTH_LONG).show();
+                    }
+                });
     }
 
     public void openSettings() {
