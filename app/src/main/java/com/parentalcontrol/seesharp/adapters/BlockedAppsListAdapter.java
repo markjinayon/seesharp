@@ -63,7 +63,7 @@ public class BlockedAppsListAdapter extends ArrayAdapter<String> {
         }
 
         viewHolder.appLabel.setText(appLabel);
-        viewHolder.appSwitch.setChecked(false);
+        viewHolder.appSwitch.setOnCheckedChangeListener(null);
         viewHolder.appSwitch.setChecked(blockedApps.contains(packageName));
 
         viewHolder.appSwitch.setOnCheckedChangeListener((compound, b) -> {
