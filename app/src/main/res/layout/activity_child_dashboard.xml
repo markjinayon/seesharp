@@ -167,7 +167,13 @@
                         <TextView
                             android:id="@+id/webFilteringState"
                             android:layout_width="wrap_content"
-                            android:layout_height="wrap_content" />
+                            android:layout_height="wrap_content"
+                            android:layout_below="@+id/textView6"
+                            android:layout_centerHorizontal="true"
+                            android:layout_marginTop="2dp"
+                            android:fontFamily="@font/roboto_bold"
+                            android:textColor="@color/white"
+                            android:textSize="14sp" />
 
                     </RelativeLayout>
                 </androidx.cardview.widget.CardView>
