@@ -15,11 +15,6 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
-import com.google.android.gms.safetynet.SafeBrowsingThreat;
-import com.google.android.gms.safetynet.SafetyNet;
-import com.google.android.gms.safetynet.SafetyNetApi;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Tasks;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -33,8 +28,6 @@ import com.parentalcontrol.seesharp.model.User;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.Executor;
 
 public class SeeSharpAccessibilityService extends AccessibilityService {
 
@@ -58,11 +51,6 @@ public class SeeSharpAccessibilityService extends AccessibilityService {
         info.flags = AccessibilityServiceInfo.FLAG_REPORT_VIEW_IDS | AccessibilityServiceInfo.FLAG_RETRIEVE_INTERACTIVE_WINDOWS;
         setServiceInfo(info);
 
-        try {
-            Tasks.await(SafetyNet.getClient(this).initSafeBrowsing());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
 
         firebaseAuth = FirebaseAuth.getInstance();
         firebaseDatabase = FirebaseDatabase.getInstance();
@@ -99,24 +87,60 @@ public class SeeSharpAccessibilityService extends AccessibilityService {
 
     }
 
-    private String captureUrl(AccessibilityNodeInfo info, SupportedBrowserConfig config) {
-        List<AccessibilityNodeInfo> nodes = info.findAccessibilityNodeInfosByViewId(config.addressBarId);
-        if (nodes == null || nodes.size() <= 0) {
-            return null;
-        }
+    @Override
+    public void onInterrupt() {
+        Log.e(TAG, "onInterrupt: something went wrong!");
+    }
 
-        AccessibilityNodeInfo addressBarNodeInfo = nodes.get(0);
-        String url = null;
-        if (addressBarNodeInfo.getText() != null) {
-            url = addressBarNodeInfo.getText().toString();
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if (firebaseAuth.getCurrentUser() != null) {
+            changeAppBlockingStatus(false, "Accessibility service is now disabled");
         }
-        addressBarNodeInfo.recycle();
-        return url;
     }
 
     @Override
     public void onAccessibilityEvent(AccessibilityEvent accessibilityEvent) {
-        if (accessibilityEvent.getPackageName() == null || user == null) return;
+        if (firebaseAuth.getCurrentUser() == null) {
+            System.out.println("wala na");
+            disableSelf();
+            return;
+        }
+
+        if (user == null) {
+            System.out.println("Umabot na");
+            if (firebaseAuth.getCurrentUser() == null) {
+                startActivity(new Intent(this, SignInActivity.class));
+                stopSelf();
+                return;
+            }
+
+            firebaseDatabase.getReference("users")
+                    .child(firebaseAuth.getCurrentUser().getUid())
+                    .addValueEventListener(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+                            user = snapshot.getValue(User.class);
+                            if (user == null) return;
+                            if (!user.appBlockingState) {
+                                changeAppBlockingStatus(true, "Accessibility service is now enabled");
+                                changeAppTimeLimitStatus(true, "");
+                            }
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError error) {
+
+                        }
+                    });
+            return;
+        }
+
+        if (accessibilityEvent.getPackageName() == null ) {
+            return;
+        }
 
         String packageName = accessibilityEvent.getPackageName().toString();
 
@@ -221,17 +245,22 @@ public class SeeSharpAccessibilityService extends AccessibilityService {
         return browsers;
     }
 
-    @Override
-    public void onInterrupt() {
-        Log.e(TAG, "onInterrupt: something went wrong!");
+    private String captureUrl(AccessibilityNodeInfo info, SupportedBrowserConfig config) {
+        List<AccessibilityNodeInfo> nodes = info.findAccessibilityNodeInfosByViewId(config.addressBarId);
+        if (nodes == null || nodes.size() <= 0) {
+            return null;
+        }
+
+        AccessibilityNodeInfo addressBarNodeInfo = nodes.get(0);
+        String url = null;
+        if (addressBarNodeInfo.getText() != null) {
+            url = addressBarNodeInfo.getText().toString();
+        }
+        addressBarNodeInfo.recycle();
+        return url;
     }
 
 
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        changeAppBlockingStatus(false, "Accessibility service is now disabled");
-    }
 
     public void checkAppBlocking(String packageName) {
         if (isOnBlockedApps(packageName)) {
