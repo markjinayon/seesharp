@@ -80,7 +80,7 @@ public class ChildDashboardActivity extends AppCompatActivity {
 
                         ((TextView) findViewById(R.id.userName)).setText(user.fullName);
 
-                        ((TextView) findViewById(R.id.webFilteringState)).setText(user.webFilteringState+"");
+                        ((TextView) findViewById(R.id.webFilteringState)).setText(user.webFilteringState ? "ENABLED":"DISABLED");
                     }
 
                     @Override
@@ -93,7 +93,7 @@ public class ChildDashboardActivity extends AppCompatActivity {
 
     private void changeWebFilteringState() {
         String state = ((TextView) findViewById(R.id.webFilteringState)).getText().toString();
-        boolean newState = !state.equals("true");
+        boolean newState = !state.equals("ENABLED");
         firebaseDatabase.getReference("users")
                 .child(firebaseUser.getUid())
                 .child("webFilteringState")

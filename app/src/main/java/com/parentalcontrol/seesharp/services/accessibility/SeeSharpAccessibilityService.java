@@ -194,7 +194,7 @@ public class SeeSharpAccessibilityService extends AccessibilityService {
     }
 
     private void analyzeCapturedUrl(String capturedUrl, String browserPackage) {
-        String redirectUrl = "https://www.youtube.com/watch?v=dQw4w9WgXcQ";
+        String redirectUrl = "https://www.google.com/";
         String[] keywords = {"sex", "porn", "xxx", "hentai", "xvid", "nsfw"};
 
         for (String word: keywords) {

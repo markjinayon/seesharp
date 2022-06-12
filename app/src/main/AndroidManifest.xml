@@ -39,9 +39,6 @@
             android:name=".activities.parent.ParentEditProfileActivity"
             android:exported="false" />
         <activity
-            android:name=".activities.child.GetIdActivity"
-            android:exported="false" />
-        <activity
             android:name=".activities.child.ChildEditProfileActivity"
             android:exported="false" />
         <activity

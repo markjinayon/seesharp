@@ -4,7 +4,6 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -87,7 +86,7 @@ public class PinLockscreenActivity extends AppCompatActivity {
             } else {
                 if (newPin.equals(guess)) {
                     FirebaseDatabase.getInstance().getReference("users")
-                            .child(FirebaseAuth.getInstance().getUid())
+                            .child(FirebaseAuth.getInstance().getCurrentUser() != null ? FirebaseAuth.getInstance().getCurrentUser().getUid():"")
                             .child("pin")
                             .setValue(guess)
                             .addOnSuccessListener(task -> {
