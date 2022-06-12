@@ -17,6 +17,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class ConnectedDeviceActivity extends AppCompatActivity {
 
@@ -28,6 +29,8 @@ public class ConnectedDeviceActivity extends AppCompatActivity {
     private FirebaseDatabase firebaseDatabase;
     private FirebaseUser firebaseUser;
 
+    String accountId;
+
     private User connectedUserData;
 
     @Override
@@ -35,7 +38,7 @@ public class ConnectedDeviceActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_connected_device);
 
-        String accountId = getIntent().getExtras().get("accountId").toString();
+        accountId = getIntent().getExtras().get("accountId").toString();
 
         firebaseAuth = FirebaseAuth.getInstance();
         firebaseDatabase = FirebaseDatabase.getInstance();
@@ -47,6 +50,12 @@ public class ConnectedDeviceActivity extends AppCompatActivity {
         appBlocking_connectedDevice = findViewById(R.id.appBLocking_connectedDevice);
         appBlocking_connectedDevice.setOnClickListener(view -> openBlockedAppsActivity(accountId));
 
+        screenTimeLimit_connectedDevice = findViewById(R.id.screenTimeLimit_connectedDevice);
+        screenTimeLimit_connectedDevice.setOnClickListener(view -> openScreenTimeLimitActivity(accountId));
+
+        webFiltering_connectedDevice = findViewById(R.id.webFiltering_connectedDevice);
+        webFiltering_connectedDevice.setOnClickListener(view -> changeWebFilteringState());
+
         firebaseDatabase.getReference("users").child(accountId).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -55,6 +64,8 @@ public class ConnectedDeviceActivity extends AppCompatActivity {
                 if (connectedUserData == null) return;
 
                 userName.setText(connectedUserData.fullName);
+
+                ((TextView) findViewById(R.id.webFilteringState_connectedDevice)).setText(connectedUserData.webFilteringState ? "ENABLED":"DISABLED");
 
                 if (connectedUserData.profilePic.isEmpty()) {
                     userImage.setBackgroundResource(R.drawable.ic_baseline_account_circle_24);
@@ -68,7 +79,29 @@ public class ConnectedDeviceActivity extends AppCompatActivity {
         });
     }
 
-    public void openBlockedAppsActivity(String accountId) {
+    private void changeWebFilteringState() {
+        String state = ((TextView) findViewById(R.id.webFilteringState_connectedDevice)).getText().toString();
+        boolean newState = !state.equals("ENABLED");
+        firebaseDatabase.getReference("users")
+                .child(accountId)
+                .child("webFilteringState")
+                .setValue(newState)
+                .addOnSuccessListener(task -> {
+                    if (newState) {
+                        Toast.makeText(getApplicationContext(), "Web filtering is now enabled.", Toast.LENGTH_LONG).show();
+                    } else {
+                        Toast.makeText(getApplicationContext(), "Web filtering is now disabled.", Toast.LENGTH_LONG).show();
+                    }
+                });
+    }
+
+    private void openScreenTimeLimitActivity(String accountId) {
+        Intent intent = new Intent(this, CheckScreenTimeActivity.class);
+        intent.putExtra("accountId", accountId);
+        startActivity(intent);
+    }
+
+    private void openBlockedAppsActivity(String accountId) {
         Intent intent = new Intent(this, BlockedApplicationsActivity.class);
         intent.putExtra("accountId", accountId);
         startActivity(intent);

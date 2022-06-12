@@ -1,5 +1,6 @@
 package com.parentalcontrol.seesharp.adapters;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -24,6 +25,7 @@ public class BlockedAppsListAdapter extends ArrayAdapter<String> {
 
     static class ViewHolder {
         TextView appLabel;
+        @SuppressLint("UseSwitchCompatOrMaterialCode")
         Switch appSwitch;
     }
 
@@ -50,33 +52,33 @@ public class BlockedAppsListAdapter extends ArrayAdapter<String> {
         }
 
         String packageName = getItem(position);
+        ViewHolder viewHolder = (ViewHolder) convertView.getTag();
+
+        String appLabel = null;
 
         try {
-            ViewHolder viewHolder = (ViewHolder) convertView.getTag();
-            viewHolder.appLabel.setText(getContext().getPackageManager().getApplicationLabel(getContext().getPackageManager().getApplicationInfo(packageName, 0)).toString());
-            viewHolder.appSwitch.setChecked(false);
-            viewHolder.appSwitch.setChecked(blockedApps.contains(packageName));
-
-            viewHolder.appSwitch.setOnCheckedChangeListener((compound, b) -> {
-                System.out.println("creepy");
-                if (b) {
-                    blockedApps.add(packageName);
-                } else {
-                    while(blockedApps.remove(packageName)){}
-                }
-
-                firebaseDatabase.getReference("users")
-                        .child(accountId)
-                        .child("blockedApplications")
-                        .setValue(blockedApps);
-            });
+            appLabel = getContext().getPackageManager().getApplicationLabel(getContext().getPackageManager().getApplicationInfo(packageName, 0)).toString();
         } catch (Exception e) {
-            //e.printStackTrace();
-            ViewHolder viewHolder = (ViewHolder) convertView.getTag();
-            viewHolder.appLabel.setText("Not your app");
-
+            appLabel = packageName;
         }
 
+        viewHolder.appLabel.setText(appLabel);
+        viewHolder.appSwitch.setChecked(false);
+        viewHolder.appSwitch.setChecked(blockedApps.contains(packageName));
+
+        viewHolder.appSwitch.setOnCheckedChangeListener((compound, b) -> {
+            System.out.println("creepy");
+            if (b) {
+                blockedApps.add(packageName);
+            } else {
+                while(blockedApps.remove(packageName)){}
+            }
+
+            firebaseDatabase.getReference("users")
+                    .child(accountId)
+                    .child("blockedApplications")
+                    .setValue(blockedApps);
+        });
 
         return convertView;
     }

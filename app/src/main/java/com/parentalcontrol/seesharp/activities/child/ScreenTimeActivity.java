@@ -25,7 +25,7 @@ public class ScreenTimeActivity extends AppCompatActivity {
     FirebaseAuth firebaseAuth;
     FirebaseDatabase firebaseDatabase;
 
-    ArrayList<String> lastInstalledApps;
+    ArrayList<String> lastAppTimeLimits;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,7 +39,7 @@ public class ScreenTimeActivity extends AppCompatActivity {
 
         FirebaseUser firebaseUser = firebaseAuth.getCurrentUser();
         if (firebaseUser != null) {
-            lastInstalledApps = new ArrayList<>();
+            lastAppTimeLimits = new ArrayList<>();
             firebaseDatabase.getReference("users")
                     .child(firebaseUser.getUid())
                     .addValueEventListener(new ValueEventListener() {
@@ -56,10 +56,10 @@ public class ScreenTimeActivity extends AppCompatActivity {
                                         .setValue(userData);
                             }
 
-                            if (!userData.installedApplications.equals(lastInstalledApps)) {
+                            if (!userData.appTimeLimits.equals(lastAppTimeLimits)) {
                                 ScreenTimeListAdapter screenTimeListAdapter = new ScreenTimeListAdapter(getApplicationContext(), userData.appTimeLimits);
                                 appList_screenTime.setAdapter(screenTimeListAdapter);
-                                lastInstalledApps = userData.installedApplications;
+                                lastAppTimeLimits = userData.appTimeLimits;
                             }
                         }
 

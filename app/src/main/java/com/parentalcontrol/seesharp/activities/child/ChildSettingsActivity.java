@@ -22,7 +22,7 @@ public class ChildSettingsActivity extends AppCompatActivity {
     private FirebaseUser firebaseUser;
     private FirebaseDatabase firebaseDatabase;
 
-    private Button logout_childSettings, getId_childSettings, changePin_childSettings, editProfile_childSettings;
+    private Button logout_childSettings, getId_childSettings, changePin_childSettings, editProfile_childSettings, aboutUs_childSettings;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,6 +44,13 @@ public class ChildSettingsActivity extends AppCompatActivity {
 
         editProfile_childSettings = findViewById(R.id.editProfile_childSettings);
         editProfile_childSettings.setOnClickListener(view -> openChaneProfileActivity());
+
+        aboutUs_childSettings = findViewById(R.id.aboutUs_childSettings);
+        aboutUs_childSettings.setOnClickListener(view -> openAboutUsActivity());
+    }
+
+    private void openAboutUsActivity() {
+        startActivity(new Intent(this, ChildAboutUsActivity.class));
     }
 
     private void openChaneProfileActivity() {

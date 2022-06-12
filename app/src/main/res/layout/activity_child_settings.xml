@@ -101,7 +101,7 @@
             app:iconTint="@color/primary" />
 
         <Button
-            android:id="@+id/button7"
+            android:id="@+id/aboutUs_childSettings"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="15dp"

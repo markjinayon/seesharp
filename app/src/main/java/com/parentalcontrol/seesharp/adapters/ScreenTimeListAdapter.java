@@ -1,6 +1,7 @@
 package com.parentalcontrol.seesharp.adapters;
 
 import android.content.Context;
+import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -63,35 +64,42 @@ public class ScreenTimeListAdapter extends ArrayAdapter<String> {
             convertView.setTag(viewHolder);
         }
 
+        ViewHolder viewHolder = (ViewHolder) convertView.getTag();
+
+        Drawable appIcon = null;
+        String appLabel = null;
+
         try {
-            ViewHolder viewHolder = (ViewHolder) convertView.getTag();
-            viewHolder.appIcon.setImageDrawable(getContext().getPackageManager().getApplicationIcon(packageName));
-            viewHolder.appLabel.setText(getContext().getPackageManager().getApplicationLabel(getContext().getPackageManager().getApplicationInfo(packageName, 0)).toString());
-            viewHolder.spinner.setOnItemSelectedListener(null);
-            selectValue(viewHolder.spinner, timeLimit);
-
-            int selectedPosition = viewHolder.spinner.getSelectedItemPosition();
-            viewHolder.spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-                @Override
-                public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                    if (firebaseUser != null && i != selectedPosition) {
-                        while (appTimeLimits.remove(value)) {}
-                        appTimeLimits.add(packageName+"::"+viewHolder.spinner.getSelectedItem().toString());
-                        firebaseDatabase.getReference("users")
-                                .child(firebaseUser.getUid())
-                                .child("appTimeLimits")
-                                .setValue(appTimeLimits);
-                    }
-                }
-
-                @Override
-                public void onNothingSelected(AdapterView<?> adapterView) {
-
-                }
-            });
+            appIcon = getContext().getPackageManager().getApplicationIcon(packageName);
+            appLabel = getContext().getPackageManager().getApplicationLabel(getContext().getPackageManager().getApplicationInfo(packageName, 0)).toString();
         } catch (Exception e) {
-            //e.printStackTrace();
+            appLabel = packageName;
         }
+
+        viewHolder.appIcon.setImageDrawable(appIcon);
+        viewHolder.appLabel.setText(appLabel);
+        viewHolder.spinner.setOnItemSelectedListener(null);
+        selectValue(viewHolder.spinner, timeLimit);
+
+        int selectedPosition = viewHolder.spinner.getSelectedItemPosition();
+        viewHolder.spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                if (firebaseUser != null && i != selectedPosition) {
+                    while (appTimeLimits.remove(value)) {}
+                    appTimeLimits.add(packageName+"::"+viewHolder.spinner.getSelectedItem().toString());
+                    firebaseDatabase.getReference("users")
+                            .child(firebaseUser.getUid())
+                            .child("appTimeLimits")
+                            .setValue(appTimeLimits);
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
 
         return convertView;
     }

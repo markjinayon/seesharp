@@ -2,6 +2,7 @@ package com.parentalcontrol.seesharp.adapters;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -60,28 +61,35 @@ public class AppBlockingListAdapter extends ArrayAdapter<String> {
 
         ViewHolder viewHolder = (ViewHolder) convertView.getTag();
 
+        Drawable appIcon = null;
+        String appLabel = null;
+
         try {
-            viewHolder.appIcon.setImageDrawable(getContext().getPackageManager().getApplicationIcon(packageName));
-            viewHolder.appLabel.setText(getContext().getPackageManager().getApplicationLabel(getContext().getPackageManager().getApplicationInfo(packageName, 0)).toString());
-            viewHolder.appSwitch.setOnCheckedChangeListener(null);
-            viewHolder.appSwitch.setChecked(blockedApplications.contains(packageName));
-
-            viewHolder.appSwitch.setOnCheckedChangeListener((compound, b) -> {
-                System.out.println("clicked");
-                if (b) {
-                    blockedApplications.add(packageName);
-                } else {
-                    while(blockedApplications.remove(packageName)){}
-                }
-
-                firebaseDatabase.getReference("users")
-                        .child(firebaseUser.getUid())
-                        .child("blockedApplications")
-                        .setValue(blockedApplications);
-            });
+            appIcon = getContext().getPackageManager().getApplicationIcon(packageName);
+            appLabel = getContext().getPackageManager().getApplicationLabel(getContext().getPackageManager().getApplicationInfo(packageName, 0)).toString();
         } catch (Exception e) {
-
+            appLabel = packageName;
         }
+
+        viewHolder.appIcon.setImageDrawable(appIcon);
+        viewHolder.appLabel.setText(appLabel);
+
+        viewHolder.appSwitch.setOnCheckedChangeListener(null);
+        viewHolder.appSwitch.setChecked(blockedApplications.contains(packageName));
+
+        viewHolder.appSwitch.setOnCheckedChangeListener((compound, b) -> {
+            System.out.println("clicked");
+            if (b) {
+                blockedApplications.add(packageName);
+            } else {
+                while(blockedApplications.remove(packageName)){}
+            }
+
+            firebaseDatabase.getReference("users")
+                    .child(firebaseUser.getUid())
+                    .child("blockedApplications")
+                    .setValue(blockedApplications);
+        });
 
         return  convertView;
     }

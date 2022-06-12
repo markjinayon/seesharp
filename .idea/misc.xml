@@ -64,11 +64,18 @@
         <entry key="..\:/Users/jinay/Desktop/SeeSharp/app/src/main/res/layout/activity_child_dashboard.xml" value="0.36666666666666664" />
         <entry key="..\:/Users/jinay/Desktop/SeeSharp/app/src/main/res/layout/activity_parent_dashboard.xml" value="0.36666666666666664" />
         <entry key="..\:/Users/jinay/Desktop/SeeSharp/app/src/main/res/layout/item_list_app_blocking.xml" value="0.33" />
+        <entry key="..\:/Users/jinay/Desktop/seesharp/app/src/main/res/layout/activity_blocked_applications.xml" value="0.17552083333333332" />
+        <entry key="..\:/Users/jinay/Desktop/seesharp/app/src/main/res/layout/activity_check_screentime.xml" value="0.1" />
+        <entry key="..\:/Users/jinay/Desktop/seesharp/app/src/main/res/layout/activity_child_about_us.xml" value="0.17552083333333332" />
         <entry key="..\:/Users/jinay/Desktop/seesharp/app/src/main/res/layout/activity_child_change_pin.xml" value="0.18802083333333333" />
         <entry key="..\:/Users/jinay/Desktop/seesharp/app/src/main/res/layout/activity_child_dashboard.xml" value="0.33" />
         <entry key="..\:/Users/jinay/Desktop/seesharp/app/src/main/res/layout/activity_child_edit_profile.xml" value="0.36666666666666664" />
         <entry key="..\:/Users/jinay/Desktop/seesharp/app/src/main/res/layout/activity_child_settings.xml" value="0.28958333333333336" />
+        <entry key="..\:/Users/jinay/Desktop/seesharp/app/src/main/res/layout/activity_connected_device.xml" value="0.36666666666666664" />
         <entry key="..\:/Users/jinay/Desktop/seesharp/app/src/main/res/layout/activity_pin_lockscreen.xml" value="0.18802083333333333" />
+        <entry key="..\:/Users/jinay/Desktop/seesharp/app/src/main/res/layout/item_list_check_screentime.xml" value="0.36666666666666664" />
+        <entry key="..\:/Users/jinay/Desktop/seesharp/app/src/main/res/layout/item_list_connected_devices.xml" value="0.36666666666666664" />
+        <entry key="..\:/Users/jinay/Desktop/seesharp/app/src/main/res/layout/item_list_screen_time.xml" value="0.36666666666666664" />
       </map>
     </option>
   </component>
