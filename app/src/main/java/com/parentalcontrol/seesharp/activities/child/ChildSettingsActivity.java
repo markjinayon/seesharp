@@ -2,9 +2,13 @@ package com.parentalcontrol.seesharp.activities.child;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.ClipData;
+import android.content.ClipboardManager;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
+import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -18,7 +22,7 @@ public class ChildSettingsActivity extends AppCompatActivity {
     private FirebaseUser firebaseUser;
     private FirebaseDatabase firebaseDatabase;
 
-    private Button logout_childSettings;
+    private Button logout_childSettings, getId_childSettings, changePin_childSettings;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,6 +35,26 @@ public class ChildSettingsActivity extends AppCompatActivity {
 
         logout_childSettings = findViewById(R.id.logout_childSettings);
         logout_childSettings.setOnClickListener(view -> logout());
+
+        getId_childSettings = findViewById(R.id.getId_childSettings);
+        getId_childSettings.setOnClickListener(view -> getId());
+
+        changePin_childSettings = findViewById(R.id.changePin_childSettings);
+        changePin_childSettings.setOnClickListener(view -> openChangePinActivity());
+    }
+
+    private void openChangePinActivity() {
+        Intent intent = new Intent(this, PinLockscreenActivity.class);
+        intent.putExtra("pin", "");
+        intent.putExtra("newPin", "");
+        startActivity(intent);
+    }
+
+    private void getId() {
+        ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
+        ClipData clip = ClipData.newPlainText("", firebaseUser.getUid());
+        clipboard.setPrimaryClip(clip);
+        Toast.makeText(getApplicationContext(), "Copied", Toast.LENGTH_LONG).show();
     }
 
     private void logout() {

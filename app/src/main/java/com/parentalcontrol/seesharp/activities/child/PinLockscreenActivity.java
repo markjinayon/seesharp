@@ -5,12 +5,16 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
+import android.widget.TextView;
+import android.widget.Toast;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.FirebaseDatabase;
 import com.parentalcontrol.seesharp.R;
 
 public class PinLockscreenActivity extends AppCompatActivity {
 
-    private String pin, guess;
+    private String pin, guess, newPin;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -19,6 +23,20 @@ public class PinLockscreenActivity extends AppCompatActivity {
 
         pin = getIntent().getExtras().get("pin").toString();
         guess = "";
+
+        if (pin.equals("")) {
+            ((TextView) findViewById(R.id.lockActivity_childSettings)).setText("Change PIN");
+            newPin = getIntent().getExtras().get("newPin").toString();
+            System.out.println(newPin);
+            if (newPin.equals("")) {
+                ((TextView) findViewById(R.id.lockSubActivity_childSettings)).setText("Enter a new PIN");
+            } else {
+                ((TextView) findViewById(R.id.lockSubActivity_childSettings)).setText("Confirm new PIN");
+            }
+        } else {
+            ((TextView) findViewById(R.id.lockActivity_childSettings)).setText("");
+            ((TextView) findViewById(R.id.lockSubActivity_childSettings)).setText("Enter PIN");
+        }
 
         findViewById(R.id.n1).setOnClickListener(view -> validate("1"));
         findViewById(R.id.n2).setOnClickListener(view -> validate("2"));
@@ -36,6 +54,8 @@ public class PinLockscreenActivity extends AppCompatActivity {
 
     public void validate(String num) {
 
+        if (guess.length() == 4) return;
+
         if (num.equals("clr") && guess.length() > 0) {
             guess = guess.substring(0, guess.length()-1);
             fillEntry(guess.length());
@@ -46,16 +66,39 @@ public class PinLockscreenActivity extends AppCompatActivity {
             guess += num;
         }
 
-        if (pin.length() == guess.length()) {
+        if (pin.length() != 0 && pin.length() == guess.length()) {
             if (pin.equals(guess)) {
-                //puntang dash
                 startActivity(new Intent(this, ChildDashboardActivity.class));
                 finish();
             } else {
                 fillEntry(guess.length());
                 guess = "";
                 fillEntry(guess.length());
-                //clear
+            }
+        }
+
+        if (pin.equals("") && guess.length() == 4) {
+            if (newPin.equals("")) {
+                Intent intent = new Intent(this, PinLockscreenActivity.class);
+                intent.putExtra("pin", "");
+                intent.putExtra("newPin", guess);
+                startActivity(intent);
+                finish();
+            } else {
+                if (newPin.equals(guess)) {
+                    FirebaseDatabase.getInstance().getReference("users")
+                            .child(FirebaseAuth.getInstance().getUid())
+                            .child("pin")
+                            .setValue(guess)
+                            .addOnSuccessListener(task -> {
+                                Toast.makeText(getApplicationContext(), "Updating pin success", Toast.LENGTH_LONG).show();
+                                finish();
+                            });
+                } else {
+                    fillEntry(guess.length());
+                    guess = "";
+                    fillEntry(guess.length());
+                }
             }
         }
     }

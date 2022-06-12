@@ -28,6 +28,16 @@
             android:textColor="@color/primary"
             android:textSize="40sp" />
 
+        <TextView
+            android:id="@+id/lockActivity_childSettings"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/roboto_bold"
+            android:text="Change PIN"
+            android:textAlignment="center"
+            android:textColor="@color/light_black"
+            android:textSize="20sp" />
+
     </LinearLayout>
 
     <LinearLayout
@@ -41,7 +51,7 @@
         app:layout_constraintTop_toBottomOf="@+id/seesharp">
 
         <TextView
-            android:id="@+id/textView11"
+            android:id="@+id/lockSubActivity_childSettings"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:fontFamily="@font/roboto_bold"

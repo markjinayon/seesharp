@@ -104,13 +104,11 @@ public class SeeSharpAccessibilityService extends AccessibilityService {
     @Override
     public void onAccessibilityEvent(AccessibilityEvent accessibilityEvent) {
         if (firebaseAuth.getCurrentUser() == null) {
-            System.out.println("wala na");
             disableSelf();
             return;
         }
 
         if (user == null) {
-            System.out.println("Umabot na");
             if (firebaseAuth.getCurrentUser() == null) {
                 startActivity(new Intent(this, SignInActivity.class));
                 stopSelf();
@@ -160,9 +158,6 @@ public class SeeSharpAccessibilityService extends AccessibilityService {
                 }
             }
         }
-
-
-        Log.e(TAG, "onAccessibilityEvent: " + packageName);
 
     }
 

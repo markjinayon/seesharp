@@ -33,9 +33,6 @@
             android:name=".activities.child.ChildAboutUsActivity"
             android:exported="false" />
         <activity
-            android:name=".activities.child.ChildConfirmPinActivity"
-            android:exported="false" />
-        <activity
             android:name=".activities.parent.NotificationsActivity"
             android:exported="false" />
         <activity
@@ -43,9 +40,6 @@
             android:exported="false" />
         <activity
             android:name=".activities.child.GetIdActivity"
-            android:exported="false" />
-        <activity
-            android:name=".activities.child.ChildChangePinActivity"
             android:exported="false" />
         <activity
             android:name=".activities.child.ChildEditProfileActivity"
