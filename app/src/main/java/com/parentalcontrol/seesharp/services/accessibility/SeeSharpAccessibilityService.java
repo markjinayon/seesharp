@@ -147,6 +147,7 @@ public class SeeSharpAccessibilityService extends AccessibilityService {
         if (user.appBlockingState) {
             checkAppBlocking(packageName);
         }
+
         if (user.appTimeLimitState) {
             checkScreenTimeLimit(packageName);
         }
@@ -199,6 +200,7 @@ public class SeeSharpAccessibilityService extends AccessibilityService {
 
         for (String word: keywords) {
             if (capturedUrl.contains(word) && (capturedUrl.contains(".net") || capturedUrl.contains(".com"))) {
+                addToNotifications("WebFiltering", "Tried to access " + capturedUrl);
                 performRedirect(redirectUrl, browserPackage);
             }
         }
@@ -236,7 +238,7 @@ public class SeeSharpAccessibilityService extends AccessibilityService {
     private static List<SupportedBrowserConfig> getSupportedBrowsers() {
         List<SupportedBrowserConfig> browsers = new ArrayList<>();
         browsers.add(new SupportedBrowserConfig("com.android.chrome", "com.android.chrome:id/url_bar"));
-        browsers.add(new SupportedBrowserConfig("com.mozilla.firefox", "org.mozilla.firefox:id/url_bar_title"));
+        browsers.add(new SupportedBrowserConfig("com.mozilla.firefox", "org.mozilla.firefox:id/url_bar_title")); //di sure
         return browsers;
     }
 
@@ -255,10 +257,9 @@ public class SeeSharpAccessibilityService extends AccessibilityService {
         return url;
     }
 
-
-
     public void checkAppBlocking(String packageName) {
         if (isOnBlockedApps(packageName)) {
+            addToNotifications("AppBlocking", "Tried to open " + packageName);
             takeToHomeScreen();
             Toast.makeText(SeeSharpAccessibilityService.this, "You tried to open a blocked application!", Toast.LENGTH_LONG).show();
         }
@@ -269,15 +270,17 @@ public class SeeSharpAccessibilityService extends AccessibilityService {
 
         if (timeLimit.isEmpty()) return;
 
+        System.out.println("dumaan");
         long appTimeLimit = Integer.parseInt(timeLimit) * 3600000L;
         UsageStatsManager usageStatsManager = (UsageStatsManager) getSystemService(USAGE_STATS_SERVICE);
         List<UsageStats> appList = usageStatsManager.queryUsageStats(UsageStatsManager.INTERVAL_DAILY,  System.currentTimeMillis() - 1000*3600*24,  System.currentTimeMillis());
 
         for (UsageStats app: appList) {
             if (app.getPackageName().equals(packageName)) System.out.println(app.getTotalTimeInForeground());
-            if (app.getPackageName().equals(packageName) && app.getTotalTimeInForeground() >= appTimeLimit) {
+            if (app.getPackageName().equals(packageName) && app.getTotalTimeInForeground() >= 10) {
                 takeToHomeScreen();
                 Toast.makeText(SeeSharpAccessibilityService.this, "Application already reached its time limit!", Toast.LENGTH_LONG).show();
+                addToNotifications("ScreenTimeLimit", packageName+" reached its time limit");
             }
         }
     }
@@ -335,5 +338,14 @@ public class SeeSharpAccessibilityService extends AccessibilityService {
         startMain.addCategory(Intent.CATEGORY_HOME);
         startMain.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(startMain);
+    }
+
+    private void addToNotifications(String activity, String message) {
+        Long tsLong = System.currentTimeMillis()/1000;
+        String ts = tsLong.toString();
+        firebaseDatabase.getReference("notification")
+                .child(firebaseAuth.getUid())
+                .child(ts)
+                .setValue(activity+"::"+message);
     }
 }

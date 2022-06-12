@@ -52,13 +52,13 @@ public class ChildDashboardActivity extends AppCompatActivity {
         settings_childDashboard = findViewById(R.id.settings_childDashboard);
         settings_childDashboard.setOnClickListener(view -> openSettings());
 
-
-
         if (firebaseUser == null) {
             startActivity(new Intent(this, SignInActivity.class));
             finish();
             return;
         }
+
+        updateDeviceName();
 
         firebaseDatabase.getReference("users")
                 .child(firebaseUser.getUid())
@@ -91,6 +91,13 @@ public class ChildDashboardActivity extends AppCompatActivity {
 
     }
 
+    private void updateDeviceName() {
+        firebaseDatabase.getReference("users")
+                .child(firebaseUser.getUid())
+                .child("deviceName")
+                .setValue(DeviceHelper.getDeviceName());
+    }
+
     private void changeWebFilteringState() {
         String state = ((TextView) findViewById(R.id.webFilteringState)).getText().toString();
         boolean newState = !state.equals("ENABLED");
@@ -107,15 +114,15 @@ public class ChildDashboardActivity extends AppCompatActivity {
                 });
     }
 
-    public void openSettings() {
+    private void openSettings() {
         startActivity(new Intent(this, ChildSettingsActivity.class));
     }
 
-    public void openAppBlockingActivity() {
+    private void openAppBlockingActivity() {
         startActivity(new Intent(this, ApplicationBlockingActivity.class));
     }
 
-    public void openScreenTimeActivity() {
+    private void openScreenTimeActivity() {
         startActivity(new Intent(this, ScreenTimeActivity.class));
     }
 
