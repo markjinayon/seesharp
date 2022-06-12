@@ -47,12 +47,13 @@
             <androidx.cardview.widget.CardView
                 android:id="@+id/userCard"
                 android:layout_width="320dp"
-                android:layout_height="130dp"
+                android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 app:cardBackgroundColor="@color/white"
                 app:cardCornerRadius="20dp"
                 app:cardElevation="5dp"
-                app:cardPreventCornerOverlap="false">
+                app:cardPreventCornerOverlap="false"
+                app:contentPaddingLeft="18dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -67,21 +68,37 @@
 
                         <ImageView
                             android:id="@+id/userImage"
-                            android:layout_width="wrap_content"
+                            android:layout_width="45dp"
                             android:layout_height="match_parent"
                             android:layout_weight="1"
                             app:srcCompat="@drawable/ic_baseline_account_circle_24" />
 
-                        <TextView
-                            android:id="@+id/userName"
+                        <LinearLayout
                             android:layout_width="wrap_content"
                             android:layout_height="match_parent"
                             android:layout_weight="1"
-                            android:fontFamily="@font/roboto_bold"
-                            android:gravity="center_vertical"
-                            android:text="Ronie Dave"
-                            android:textColor="@color/light_black"
-                            android:textSize="24sp" />
+                            android:orientation="vertical"
+                            android:paddingLeft="5dp">
+
+                            <TextView
+                                android:id="@+id/userName"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:fontFamily="@font/roboto_bold"
+                                android:gravity="bottom"
+                                android:text="Ronie Dave"
+                                android:textColor="@color/light_black"
+                                android:textSize="24sp" />
+
+                            <TextView
+                                android:id="@+id/textView22"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:text="TextView"
+                                android:textSize="16sp" />
+                        </LinearLayout>
 
                     </LinearLayout>
 
@@ -283,28 +300,28 @@
 
             <LinearLayout
                 android:id="@+id/app_settings"
-                android:layout_width="350dp"
-                android:layout_height="62dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:layout_marginLeft="1dp"
                 android:layout_weight="1"
-                android:orientation="horizontal"
-                android:padding="8dp">
+                android:orientation="vertical"
+                android:padding="3dp">
 
                 <Button
                     android:id="@+id/notifications_connectedDevice"
-                    android:layout_width="35dp"
-                    android:layout_height="48dp"
-                    android:layout_marginEnd="12dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="62dp"
+                    android:layout_gravity="center"
                     android:layout_weight="1"
                     android:backgroundTint="@color/primary"
                     android:fontFamily="@font/roboto_bold"
                     android:minHeight="24dp"
-                    android:text="Notifications"
+                    android:text="Reports"
                     android:textAlignment="viewStart"
-                    android:textSize="12sp"
+                    android:textSize="16sp"
                     app:cornerRadius="10dp"
-                    app:icon="@drawable/ic_baseline_notifications_24" />
+                    app:icon="@drawable/ic_baseline_insert_drive_file_24" />
+
             </LinearLayout>
         </LinearLayout>
     </ScrollView>

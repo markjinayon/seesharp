@@ -46,8 +46,10 @@
         <entry key="..\:/JEM FILES/4TH/SeeSharp/app/src/main/res/layout/activity_parent_confirm_pin.xml" value="0.23052536231884058" />
         <entry key="..\:/JEM FILES/4TH/SeeSharp/app/src/main/res/layout/activity_parent_dashboard.xml" value="0.264" />
         <entry key="..\:/JEM FILES/4TH/SeeSharp/app/src/main/res/layout/activity_parent_edit_profile.xml" value="0.264" />
+        <entry key="..\:/JEM FILES/4TH/SeeSharp/app/src/main/res/layout/activity_parent_logout.xml" value="0.264" />
         <entry key="..\:/JEM FILES/4TH/SeeSharp/app/src/main/res/layout/activity_parent_settings.xml" value="0.264" />
         <entry key="..\:/JEM FILES/4TH/SeeSharp/app/src/main/res/layout/activity_pin_lockscreen.xml" value="0.264" />
+        <entry key="..\:/JEM FILES/4TH/SeeSharp/app/src/main/res/layout/activity_reports.xml" value="0.23052536231884058" />
         <entry key="..\:/JEM FILES/4TH/SeeSharp/app/src/main/res/layout/activity_screen_time.xml" value="0.264" />
         <entry key="..\:/JEM FILES/4TH/SeeSharp/app/src/main/res/layout/activity_sign_in.xml" value="0.264" />
         <entry key="..\:/JEM FILES/4TH/SeeSharp/app/src/main/res/layout/activity_sign_up.xml" value="0.264" />
@@ -55,7 +57,8 @@
         <entry key="..\:/JEM FILES/4TH/SeeSharp/app/src/main/res/layout/item_list_blocked_app.xml" value="0.23052536231884058" />
         <entry key="..\:/JEM FILES/4TH/SeeSharp/app/src/main/res/layout/item_list_check_screentime.xml" value="0.23052536231884058" />
         <entry key="..\:/JEM FILES/4TH/SeeSharp/app/src/main/res/layout/item_list_connected_devices.xml" value="0.264" />
-        <entry key="..\:/JEM FILES/4TH/SeeSharp/app/src/main/res/layout/item_list_screen_time.xml" value="0.23052536231884058" />
+        <entry key="..\:/JEM FILES/4TH/SeeSharp/app/src/main/res/layout/item_list_reports.xml" value="0.23052536231884058" />
+        <entry key="..\:/JEM FILES/4TH/SeeSharp/app/src/main/res/layout/item_list_screen_time.xml" value="0.264" />
         <entry key="..\:/JEM FILES/4TH/SeeSharp/app/src/main/res/layout/rounded_corners.xml" value="0.22282608695652173" />
         <entry key="..\:/JEM FILES/4TH/SeeSharp/app/src/main/res/layout/string.xml" value="0.22282608695652173" />
         <entry key="..\:/JEM FILES/4TH/SeeSharp/app/src/main/res/layout/testing.xml" value="0.24895833333333334" />
