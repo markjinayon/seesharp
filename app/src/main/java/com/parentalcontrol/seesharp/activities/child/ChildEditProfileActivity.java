@@ -69,7 +69,7 @@ public class ChildEditProfileActivity extends AppCompatActivity {
                         fullName_childEditProfile.getEditText().setText(user.fullName);
 
                         if (user.profilePic.equals("")) {
-                            profilePic_childEditProfile.setBackgroundResource(R.drawable.ic_baseline_account_circle_24);
+                            profilePic_childEditProfile.setImageResource(R.drawable.student);
                         } else {
 //                            firebaseStorage.getReferenceFromUrl(user.profilePic).getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
 //                                @Override

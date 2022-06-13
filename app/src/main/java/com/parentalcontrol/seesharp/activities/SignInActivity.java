@@ -12,6 +12,7 @@ import com.parentalcontrol.seesharp.R;
 import com.parentalcontrol.seesharp.activities.child.ChildDashboardActivity;
 import com.parentalcontrol.seesharp.activities.child.PinLockscreenActivity;
 import com.parentalcontrol.seesharp.activities.parent.ParentDashboardActivity;
+import com.parentalcontrol.seesharp.activities.parent.ParentLogoutActivity;
 import com.parentalcontrol.seesharp.model.User;
 
 import androidx.annotation.NonNull;
@@ -172,7 +173,7 @@ public class SignInActivity extends AppCompatActivity {
     }
 
     public void openParentDashboardActivity() {
-        startActivity(new Intent(this, ParentDashboardActivity.class));
+        startActivity(new Intent(this, ParentLogoutActivity.class));
         finish();
     }
 

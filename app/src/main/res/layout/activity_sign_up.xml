@@ -26,16 +26,12 @@
             android:padding="20dp"
             tools:context=".activities.SignInActivity">
 
-            <TextView
-                android:id="@+id/textView"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="40dp"
-                android:fontFamily="@font/bungee"
-                android:text="SEESHARP"
-                android:textAlignment="center"
-                android:textColor="@color/primary"
-                android:textSize="40sp" />
+            <ImageView
+                android:id="@+id/imageView20"
+                android:layout_width="300dp"
+                android:layout_height="100dp"
+                android:layout_gravity="center"
+                app:srcCompat="@drawable/seesharp" />
 
             <TextView
                 android:id="@+id/textView2"

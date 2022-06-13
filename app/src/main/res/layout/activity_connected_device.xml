@@ -17,17 +17,12 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <TextView
-            android:id="@+id/textView9"
-            android:layout_width="match_parent"
-            android:layout_height="80dp"
-            android:background="@color/transparent"
-            android:fontFamily="@font/bungee"
-            android:text="SEESHARP"
-            android:textAlignment="center"
-            android:textColor="@color/primary"
-            android:textSize="40sp" />
-
+        <ImageView
+            android:id="@+id/imageView"
+            android:layout_width="300dp"
+            android:layout_height="100dp"
+            android:layout_gravity="center"
+            app:srcCompat="@drawable/seesharp" />
     </LinearLayout>
 
     <ScrollView
@@ -49,60 +44,56 @@
                 android:layout_width="320dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
+                android:layout_marginTop="5dp"
                 app:cardBackgroundColor="@color/white"
-                app:cardCornerRadius="20dp"
+                app:cardCornerRadius="10dp"
                 app:cardElevation="5dp"
                 app:cardPreventCornerOverlap="false"
                 app:contentPaddingLeft="18dp">
 
                 <LinearLayout
+                    android:id="@+id/linearLayout2"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:orientation="vertical">
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:id="@+id/userImage"
+                        android:layout_width="90dp"
+                        android:layout_height="90dp"
+                        android:layout_marginVertical="10dp"
+                        android:layout_weight="1"
+                        app:srcCompat="@drawable/student" />
 
                     <LinearLayout
-                        android:id="@+id/linearLayout2"
-                        android:layout_width="match_parent"
+                        android:layout_width="wrap_content"
                         android:layout_height="match_parent"
-                        android:orientation="horizontal">
+                        android:layout_weight="1"
+                        android:orientation="vertical"
+                        android:paddingLeft="5dp">
 
-                        <ImageView
-                            android:id="@+id/userImage"
-                            android:layout_width="45dp"
-                            android:layout_height="match_parent"
+                        <TextView
+                            android:id="@+id/userName"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            app:srcCompat="@drawable/ic_baseline_account_circle_24" />
+                            android:fontFamily="@font/roboto_bold"
+                            android:gravity="bottom"
+                            android:text="Ronie Dave"
+                            android:textColor="@color/light_black"
+                            android:textSize="24sp" />
 
-                        <LinearLayout
-                            android:layout_width="wrap_content"
-                            android:layout_height="match_parent"
+                        <TextView
+                            android:id="@+id/deviceName_connectedDevice"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:orientation="vertical"
-                            android:paddingLeft="5dp">
-
-                            <TextView
-                                android:id="@+id/userName"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="1"
-                                android:fontFamily="@font/roboto_bold"
-                                android:gravity="bottom"
-                                android:text="Ronie Dave"
-                                android:textColor="@color/light_black"
-                                android:textSize="24sp" />
-
-                            <TextView
-                                android:id="@+id/textView22"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="1"
-                                android:text="TextView"
-                                android:textSize="16sp" />
-                        </LinearLayout>
-
+                            android:text="TextView"
+                            android:textSize="16sp" />
                     </LinearLayout>
 
                 </LinearLayout>
+
             </androidx.cardview.widget.CardView>
 
             <TextView
@@ -111,7 +102,7 @@
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/roboto_bold"
                 android:gravity="center"
-                android:paddingTop="15dp"
+                android:paddingTop="25dp"
                 android:text="Monitor Your Child's Device"
                 android:textColor="@color/light_black"
                 android:textSize="20sp" />
@@ -131,7 +122,7 @@
                     android:layout_margin="10dp"
                     android:layout_weight="1"
                     android:clickable="true"
-                    app:cardBackgroundColor="#8B80F8"
+                    app:cardBackgroundColor="@color/white"
                     app:cardCornerRadius="10dp"
                     app:cardElevation="5dp">
 
@@ -146,7 +137,7 @@
                             android:layout_height="75dp"
                             android:layout_centerHorizontal="true"
                             android:layout_marginTop="15dp"
-                            app:srcCompat="@drawable/ic_baseline_app_blocking_24" />
+                            app:srcCompat="@drawable/android_purple" />
 
                         <TextView
                             android:id="@+id/textView5"
@@ -158,7 +149,7 @@
                             android:fontFamily="@font/roboto_bold"
                             android:text="BLOCKED APPLICATIONS"
                             android:textAlignment="center"
-                            android:textColor="@color/white"
+                            android:textColor="@color/light_black"
                             android:textSize="16sp" />
 
                     </RelativeLayout>
@@ -170,7 +161,7 @@
                     android:layout_height="150dp"
                     android:layout_margin="10dp"
                     android:layout_weight="1"
-                    app:cardBackgroundColor="#AF8EFF"
+                    app:cardBackgroundColor="@color/white"
                     app:cardCornerRadius="10dp"
                     app:cardElevation="5dp">
 
@@ -184,7 +175,7 @@
                             android:layout_height="75dp"
                             android:layout_centerHorizontal="true"
                             android:layout_marginTop="15dp"
-                            app:srcCompat="@drawable/ic_baseline_language_24" />
+                            app:srcCompat="@drawable/web_filter" />
 
                         <TextView
                             android:id="@+id/textView6"
@@ -195,7 +186,7 @@
                             android:layout_marginTop="10dp"
                             android:fontFamily="@font/roboto_bold"
                             android:text="WEB FILTERING"
-                            android:textColor="@color/white"
+                            android:textColor="@color/light_black"
                             android:textSize="16sp" />
 
                         <TextView
@@ -206,7 +197,7 @@
                             android:layout_centerHorizontal="true"
                             android:layout_marginTop="2dp"
                             android:fontFamily="@font/roboto_bold"
-                            android:textColor="@color/white"
+                            android:textColor="@color/light_black"
                             android:textSize="14sp" />
 
                     </RelativeLayout>
@@ -228,7 +219,7 @@
                     android:layout_height="150dp"
                     android:layout_margin="10dp"
                     android:layout_weight="1"
-                    app:cardBackgroundColor="#1E87FD"
+                    app:cardBackgroundColor="@color/white"
                     app:cardCornerRadius="10dp"
                     app:cardElevation="5dp">
 
@@ -242,7 +233,7 @@
                             android:layout_height="75dp"
                             android:layout_centerHorizontal="true"
                             android:layout_marginTop="13dp"
-                            app:srcCompat="@drawable/ic_baseline_access_time_24" />
+                            app:srcCompat="@drawable/time_limit" />
 
                         <TextView
                             android:id="@+id/textView7"
@@ -254,7 +245,7 @@
                             android:fontFamily="@font/roboto_bold"
                             android:text="APPLICATION SCREENTIME LIMIT"
                             android:textAlignment="center"
-                            android:textColor="@color/white"
+                            android:textColor="@color/light_black"
                             android:textSize="14sp" />
 
                     </RelativeLayout>
@@ -266,7 +257,7 @@
                     android:layout_height="150dp"
                     android:layout_margin="10dp"
                     android:layout_weight="1"
-                    app:cardBackgroundColor="#4C5A81"
+                    app:cardBackgroundColor="@color/white"
                     app:cardCornerRadius="10dp"
                     app:cardElevation="5dp">
 
@@ -280,7 +271,7 @@
                             android:layout_height="75dp"
                             android:layout_centerHorizontal="true"
                             android:layout_marginTop="20dp"
-                            app:srcCompat="@drawable/ic_baseline_rule_24" />
+                            app:srcCompat="@drawable/yays" />
 
                         <TextView
                             android:id="@+id/textView4"
@@ -291,7 +282,7 @@
                             android:layout_marginTop="10dp"
                             android:fontFamily="@font/roboto_bold"
                             android:text="AI ASSISTANT"
-                            android:textColor="@color/white"
+                            android:textColor="@color/light_black"
                             android:textSize="16sp" />
 
                     </RelativeLayout>
@@ -301,27 +292,46 @@
             <LinearLayout
                 android:id="@+id/app_settings"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="62dp"
                 android:layout_gravity="center"
                 android:layout_weight="1"
                 android:orientation="vertical"
                 android:padding="3dp">
 
-                <Button
-                    android:id="@+id/notifications_connectedDevice"
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/reports_connectedDevice"
                     android:layout_width="wrap_content"
-                    android:layout_height="62dp"
+                    android:layout_height="50dp"
                     android:layout_gravity="center"
-                    android:layout_weight="1"
-                    android:backgroundTint="@color/primary"
-                    android:fontFamily="@font/roboto_bold"
-                    android:minHeight="24dp"
-                    android:text="Reports"
-                    android:textAlignment="viewStart"
-                    android:textSize="16sp"
-                    app:cornerRadius="10dp"
-                    app:icon="@drawable/ic_baseline_insert_drive_file_24" />
+                    android:layout_marginHorizontal="15dp"
+                    app:cardCornerRadius="10dp">
 
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginHorizontal="15dp"
+                        android:orientation="horizontal">
+
+                        <ImageView
+                            android:id="@+id/imageView3"
+                            android:layout_width="30dp"
+                            android:layout_height="30dp"
+                            android:layout_gravity="center_vertical"
+                            android:layout_weight="1"
+                            app:srcCompat="@drawable/report" />
+
+                        <TextView
+                            android:id="@+id/textView24"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:layout_marginLeft="5dp"
+                            android:layout_weight="1"
+                            android:fontFamily="@font/roboto_bold"
+                            android:text="REPORTS"
+                            android:textColor="@color/light_black" />
+                    </LinearLayout>
+                </androidx.cardview.widget.CardView>
             </LinearLayout>
         </LinearLayout>
     </ScrollView>

@@ -76,8 +76,7 @@ public class ChildDevicesListAdapter extends ArrayAdapter<String> {
         viewHolder.deviceName.setText(device.deviceName);
 
         if (device.profilePic.isEmpty()) {
-            viewHolder.profilePic.setBackgroundResource(R.drawable.ic_baseline_account_circle_24);
-            viewHolder.profilePic.setMaxWidth(75);
+            viewHolder.profilePic.setImageResource(R.drawable.student);
         }
 
         return convertView;

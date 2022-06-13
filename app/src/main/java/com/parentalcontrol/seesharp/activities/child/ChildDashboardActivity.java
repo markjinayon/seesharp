@@ -19,15 +19,14 @@ import androidx.cardview.widget.CardView;
 import android.content.Intent;
 import android.os.Bundle;
 import android.provider.Settings;
-import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 public class ChildDashboardActivity extends AppCompatActivity {
 
-    private CardView appBlocking_childDashboard, screenTimeLimit_childDashboard, webFiltering_childDashboard;
-
-    private Button settings_childDashboard;
+    private CardView appBlocking_childDashboard, screenTimeLimit_childDashboard, webFiltering_childDashboard, settings_childDashboard;
+    private ImageView userImage2;
 
     FirebaseUser firebaseUser;
     FirebaseDatabase firebaseDatabase;
@@ -39,6 +38,8 @@ public class ChildDashboardActivity extends AppCompatActivity {
 
         firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
         firebaseDatabase = FirebaseDatabase.getInstance();
+
+        userImage2 = findViewById(R.id.userImage2);
 
         appBlocking_childDashboard = findViewById(R.id.appBLocking_childDashboard);
         appBlocking_childDashboard.setOnClickListener(view -> openAppBlockingActivity());
@@ -79,8 +80,14 @@ public class ChildDashboardActivity extends AppCompatActivity {
                         }
 
                         ((TextView) findViewById(R.id.userName)).setText(user.fullName);
+                        ((TextView) findViewById(R.id.deviceName_childDashboard)).setText(user.deviceName);
 
                         ((TextView) findViewById(R.id.webFilteringState)).setText(user.webFilteringState ? "ENABLED":"DISABLED");
+
+                        if (user.profilePic.isEmpty()) {
+                            //userImage.setBackgroundResource(R.drawable.ic_baseline_account_circle_24);
+                            userImage2.setImageResource(R.drawable.student);
+                        }
                     }
 
                     @Override

@@ -17,16 +17,12 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <TextView
-            android:id="@+id/textView9"
-            android:layout_width="match_parent"
-            android:layout_height="91dp"
-            android:background="@color/transparent"
-            android:fontFamily="@font/bungee"
-            android:text="SEESHARP"
-            android:textAlignment="center"
-            android:textColor="@color/primary"
-            android:textSize="40sp" />
+        <ImageView
+            android:id="@+id/imageView14"
+            android:layout_width="250dp"
+            android:layout_height="100dp"
+            android:layout_gravity="center"
+            app:srcCompat="@drawable/seesharp" />
 
         <TextView
             android:id="@+id/lockSubActivity_childSettings"
@@ -53,8 +49,7 @@
             android:id="@+id/editProfile_childSettings"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginHorizontal="15dp"
-            android:layout_marginVertical="8dp"
+            android:layout_marginHorizontal="20dp"
             android:backgroundTint="@color/white"
             android:fontFamily="@font/roboto_bold"
             android:paddingVertical="15dp"
@@ -70,8 +65,7 @@
             android:id="@+id/changePin_childSettings"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginHorizontal="15dp"
-            android:layout_marginVertical="8dp"
+            android:layout_marginHorizontal="20dp"
             android:backgroundTint="@color/white"
             android:fontFamily="@font/roboto_bold"
             android:paddingVertical="15dp"
@@ -87,8 +81,7 @@
             android:id="@+id/getId_childSettings"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginHorizontal="15dp"
-            android:layout_marginVertical="8dp"
+            android:layout_marginHorizontal="20dp"
             android:backgroundTint="@color/white"
             android:fontFamily="@font/roboto_bold"
             android:paddingVertical="15dp"
@@ -104,8 +97,7 @@
             android:id="@+id/aboutUs_childSettings"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginHorizontal="15dp"
-            android:layout_marginVertical="8dp"
+            android:layout_marginHorizontal="20dp"
             android:backgroundTint="@color/white"
             android:fontFamily="@font/roboto_bold"
             android:paddingVertical="15dp"

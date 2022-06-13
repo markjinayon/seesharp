@@ -30,7 +30,7 @@ public class AppBlockingListAdapter extends ArrayAdapter<String> {
 
     static class ViewHolder {
         ImageView appIcon;
-        TextView appLabel;
+        TextView appLabel, appPackageName;
         @SuppressLint("UseSwitchCompatOrMaterialCode")
         Switch appSwitch;
     }
@@ -55,6 +55,7 @@ public class AppBlockingListAdapter extends ArrayAdapter<String> {
             viewHolder.appSwitch = convertView.findViewById(R.id.appSwitch_appBlocking);
             viewHolder.appIcon = convertView.findViewById(R.id.appIcon_appBlocking);
             viewHolder.appLabel = convertView.findViewById(R.id.appLabel_appBlocking);
+            viewHolder.appPackageName = convertView.findViewById(R.id.appPackageName_appBlocking);
 
             convertView.setTag(viewHolder);
         }
@@ -68,11 +69,12 @@ public class AppBlockingListAdapter extends ArrayAdapter<String> {
             appIcon = getContext().getPackageManager().getApplicationIcon(packageName);
             appLabel = getContext().getPackageManager().getApplicationLabel(getContext().getPackageManager().getApplicationInfo(packageName, 0)).toString();
         } catch (Exception e) {
-            appLabel = packageName;
+            appLabel = "Not installed";
         }
 
         viewHolder.appIcon.setImageDrawable(appIcon);
         viewHolder.appLabel.setText(appLabel);
+        viewHolder.appPackageName.setText(packageName);
 
         viewHolder.appSwitch.setOnCheckedChangeListener(null);
         viewHolder.appSwitch.setChecked(blockedApplications.contains(packageName));

@@ -22,7 +22,7 @@
 
             <ImageView
                 android:id="@+id/appIcon_appBlocking"
-                android:layout_width="15dp"
+                android:layout_width="47dp"
                 android:layout_height="75dp"
                 android:layout_weight="1"
                 android:paddingTop="10dp"
@@ -39,17 +39,18 @@
                     android:id="@+id/appLabel_appBlocking"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_gravity="bottom"
                     android:layout_weight="1"
                     android:fontFamily="@font/roboto_bold"
-                    android:gravity="center_vertical"
+                    android:gravity="bottom|center_vertical"
                     android:text="Textview"
                     android:textAlignment="viewStart"
                     android:textColor="@color/light_black"
                     android:textSize="16sp" />
 
                 <TextView
-                    android:id="@+id/textView11"
-                    android:layout_width="wrap_content"
+                    android:id="@+id/appPackageName_appBlocking"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:fontFamily="@font/roboto"

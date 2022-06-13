@@ -29,7 +29,7 @@ public class ScreenTimeListAdapter extends ArrayAdapter<String> {
     ArrayList<String> appTimeLimits;
 
     static class ViewHolder {
-        public TextView appLabel;
+        public TextView appLabel, appPackageName;
         public ImageView appIcon;
         Spinner spinner;
     }
@@ -60,6 +60,7 @@ public class ScreenTimeListAdapter extends ArrayAdapter<String> {
             viewHolder.appLabel = convertView.findViewById(R.id.appLabel_screenTime);
             viewHolder.appIcon = convertView.findViewById(R.id.appIcon_screenTime);
             viewHolder.spinner = convertView.findViewById(R.id.spinner_screenTime);
+            viewHolder.appPackageName = convertView.findViewById(R.id.appPackageName_screenTime);
 
             convertView.setTag(viewHolder);
         }
@@ -73,11 +74,12 @@ public class ScreenTimeListAdapter extends ArrayAdapter<String> {
             appIcon = getContext().getPackageManager().getApplicationIcon(packageName);
             appLabel = getContext().getPackageManager().getApplicationLabel(getContext().getPackageManager().getApplicationInfo(packageName, 0)).toString();
         } catch (Exception e) {
-            appLabel = packageName;
+            appLabel = "Not installed";
         }
 
         viewHolder.appIcon.setImageDrawable(appIcon);
         viewHolder.appLabel.setText(appLabel);
+        viewHolder.appPackageName.setText(packageName);
         viewHolder.spinner.setOnItemSelectedListener(null);
         selectValue(viewHolder.spinner, timeLimit);
 

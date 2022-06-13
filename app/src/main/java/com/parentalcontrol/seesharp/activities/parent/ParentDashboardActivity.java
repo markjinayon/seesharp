@@ -128,6 +128,7 @@ public class ParentDashboardActivity extends AppCompatActivity {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 String text = input.getText().toString();
+                if (text.replaceAll(" ", "").isEmpty()) return;
                 if (userData != null) {
                     firebaseDatabase.getReference("users").child(text).get().addOnCompleteListener(task -> {
                         if (task.isSuccessful()) {

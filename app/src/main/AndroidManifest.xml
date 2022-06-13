@@ -27,16 +27,13 @@
         android:theme="@style/Theme.MaterialComponents.Light.NoActionBar"
         tools:targetApi="31">
         <activity
-            android:name=".ParentLogoutActivity"
+            android:name=".activities.parent.ParentLogoutActivity"
             android:exported="false" />
         <activity
-            android:name=".ReportsActivity"
+            android:name=".activities.parent.ReportsActivity"
             android:exported="false" />
         <activity
             android:name=".activities.child.ChildAboutUsActivity"
-            android:exported="false" />
-        <activity
-            android:name=".activities.parent.NotificationsActivity"
             android:exported="false" />
         <activity
             android:name=".activities.child.ChildEditProfileActivity"

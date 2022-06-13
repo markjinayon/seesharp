@@ -72,6 +72,13 @@ public class SeeSharpAccessibilityService extends AccessibilityService {
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
                         user = snapshot.getValue(User.class);
                         if (user == null) return;
+
+                        if (user.userType.equals("Parent")) {
+                            disableSelf();
+                            stopSelf();
+                            return;
+                        }
+
                         if (!user.appBlockingState) {
                             changeAppBlockingStatus(true, "Accessibility service is now enabled");
                             changeAppTimeLimitStatus(true, "");

@@ -20,6 +20,7 @@ import com.parentalcontrol.seesharp.activities.SignInActivity;
 import com.parentalcontrol.seesharp.activities.child.ChildDashboardActivity;
 import com.parentalcontrol.seesharp.activities.child.PinLockscreenActivity;
 import com.parentalcontrol.seesharp.activities.parent.ParentDashboardActivity;
+import com.parentalcontrol.seesharp.activities.parent.ParentLogoutActivity;
 import com.parentalcontrol.seesharp.model.User;
 
 public class MainActivity extends AppCompatActivity {
@@ -75,11 +76,12 @@ public class MainActivity extends AppCompatActivity {
         Intent intent = new Intent(this, PinLockscreenActivity.class);
         intent.putExtra("pin", pin);
         startActivity(intent);
+        finish();
     }
 
     public void openParentDashboardActivity() {
         progressBar_main.setVisibility(View.GONE);
-        startActivity(new Intent(this, ParentDashboardActivity.class));
+        startActivity(new Intent(this, ParentLogoutActivity.class));
         finish();
     }
 

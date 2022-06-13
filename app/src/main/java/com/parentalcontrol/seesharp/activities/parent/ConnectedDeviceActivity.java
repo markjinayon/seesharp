@@ -23,7 +23,7 @@ public class ConnectedDeviceActivity extends AppCompatActivity {
 
     private TextView userName;
     private ImageView userImage;
-    private CardView appBlocking_connectedDevice, webFiltering_connectedDevice, screenTimeLimit_connectedDevice, aiAssistant_connectedDevice;
+    private CardView appBlocking_connectedDevice, webFiltering_connectedDevice, screenTimeLimit_connectedDevice, aiAssistant_connectedDevice, reports_connectedDevice;
 
     private FirebaseAuth firebaseAuth;
     private FirebaseDatabase firebaseDatabase;
@@ -64,11 +64,13 @@ public class ConnectedDeviceActivity extends AppCompatActivity {
                 if (connectedUserData == null) return;
 
                 userName.setText(connectedUserData.fullName);
+                ((TextView) findViewById(R.id.deviceName_connectedDevice)).setText(connectedUserData.deviceName);
 
                 ((TextView) findViewById(R.id.webFilteringState_connectedDevice)).setText(connectedUserData.webFilteringState ? "ENABLED":"DISABLED");
 
                 if (connectedUserData.profilePic.isEmpty()) {
-                    userImage.setBackgroundResource(R.drawable.ic_baseline_account_circle_24);
+                    //userImage.setBackgroundResource(R.drawable.ic_baseline_account_circle_24);
+                    userImage.setImageResource(R.drawable.student);
                 }
             }
 
