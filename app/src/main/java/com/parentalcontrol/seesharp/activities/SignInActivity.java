@@ -181,6 +181,7 @@ public class SignInActivity extends AppCompatActivity {
         Intent intent = new Intent(this, PinLockscreenActivity.class);
         intent.putExtra("pin", pin);
         startActivity(intent);
+        finish();
     }
 
     public void openChildDashboardActivity() {

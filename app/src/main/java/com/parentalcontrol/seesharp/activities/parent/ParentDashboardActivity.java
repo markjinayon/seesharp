@@ -71,19 +71,23 @@ public class ParentDashboardActivity extends AppCompatActivity {
                             if (userData == null) return;
 
                             if (!userData.connectedDevices.equals(lastConnectedDevices)) {
-                                firebaseDatabase.getReference("users").addListenerForSingleValueEvent(new ValueEventListener() {
+                                firebaseDatabase.getReference("users").addValueEventListener(new ValueEventListener() {
                                     @Override
                                     public void onDataChange(@NonNull DataSnapshot snapshot) {
                                         Object values = snapshot.getValue();
                                         if (values == null) return;
                                         Map<String, Device> connectedDevicesData = new HashMap<>();
+                                        ArrayList<String> activeDevices  = new ArrayList<>();
                                         for (Map.Entry<String, Object> entry: ((Map<String,Object>) values).entrySet()) {
                                             Map user = (Map) entry.getValue();
                                             if (userData.connectedDevices.contains((String) user.get("accountId"))) {
                                                 connectedDevicesData.put((String) user.get("accountId"), new Device((String) user.get("profilePic"), (String) user.get("fullName"), (String) user.get("deviceName")));
+                                                if (((boolean) user.get("appBlockingState"))) {
+                                                    activeDevices.add((String) user.get("accountId"));
+                                                }
                                             }
                                         }
-                                        ChildDevicesListAdapter adapter = new ChildDevicesListAdapter(getApplicationContext(), userData.connectedDevices, connectedDevicesData);
+                                        ChildDevicesListAdapter adapter = new ChildDevicesListAdapter(getApplicationContext(), userData.connectedDevices, connectedDevicesData, activeDevices);
                                         listDevices_parentDashboard.setAdapter(adapter);
                                         listDevices_parentDashboard.setOnItemClickListener((parent, view, position, id) -> {
                                             openDevice(userData.connectedDevices.get(position));

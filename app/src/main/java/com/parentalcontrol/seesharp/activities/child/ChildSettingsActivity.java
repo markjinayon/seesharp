@@ -15,6 +15,7 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.FirebaseDatabase;
 import com.parentalcontrol.seesharp.R;
 import com.parentalcontrol.seesharp.activities.SignInActivity;
+import com.parentalcontrol.seesharp.services.accessibility.SeeSharpAccessibilityService;
 
 public class ChildSettingsActivity extends AppCompatActivity {
 
@@ -72,8 +73,17 @@ public class ChildSettingsActivity extends AppCompatActivity {
     }
 
     private void logout() {
-        firebaseAuth.signOut();
-        startActivity(new Intent(this, SignInActivity.class));
-        finish();
+        firebaseDatabase.getReference("users")
+                .child(firebaseAuth.getUid())
+                .child("appBlockingState")
+                .setValue(false)
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        firebaseAuth.signOut();
+                        startActivity(new Intent(this, SignInActivity.class));
+                        finish();
+                    }
+                });
+
     }
 }

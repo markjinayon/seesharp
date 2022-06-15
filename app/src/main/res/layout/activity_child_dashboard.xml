@@ -273,6 +273,17 @@
                             android:textColor="@color/light_black"
                             android:textSize="16sp" />
 
+                        <TextView
+                            android:id="@+id/aiAssistantState_childDashboard"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@+id/textView4"
+                            android:layout_centerHorizontal="true"
+                            android:fontFamily="@font/roboto_bold"
+                            android:text="ENABLED"
+                            android:textColor="@color/light_black"
+                            android:textSize="14sp" />
+
                     </RelativeLayout>
                 </androidx.cardview.widget.CardView>
             </LinearLayout>

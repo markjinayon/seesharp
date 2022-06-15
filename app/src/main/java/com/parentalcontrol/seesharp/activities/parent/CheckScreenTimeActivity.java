@@ -24,8 +24,6 @@ public class CheckScreenTimeActivity extends AppCompatActivity {
 
     private String accountId;
 
-    private ArrayList<String> lastAppTimeLimits;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -36,7 +34,6 @@ public class CheckScreenTimeActivity extends AppCompatActivity {
         appList_checkScreenTime = findViewById(R.id.appList_checkScreenTime);
 
         accountId = getIntent().getExtras().get("accountId").toString();
-        lastAppTimeLimits = new ArrayList<>();
 
         firebaseDatabase.getReference("users")
                 .child(accountId)
@@ -46,11 +43,8 @@ public class CheckScreenTimeActivity extends AppCompatActivity {
                         User user = snapshot.getValue(User.class);
                         if (user == null) return;
 
-                        if (!user.appTimeLimits.equals(lastAppTimeLimits)) {
-                            ScreenTimeListAdapter adapter = new ScreenTimeListAdapter(getApplicationContext(), user.appTimeLimits);
-                            appList_checkScreenTime.setAdapter(adapter);
-                            lastAppTimeLimits = user.appTimeLimits;
-                        }
+                        ScreenTimeListAdapter adapter = new ScreenTimeListAdapter(getApplicationContext(), user.appTimeLimits);
+                        appList_checkScreenTime.setAdapter(adapter);
                     }
 
                     @Override

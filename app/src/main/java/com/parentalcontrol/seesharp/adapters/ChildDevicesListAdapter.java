@@ -32,14 +32,15 @@ public class ChildDevicesListAdapter extends ArrayAdapter<String> {
 
     private Map<String, Device> connectedDevicesData;
     private ArrayList<String> connectedDevices;
+    private ArrayList<String> activeDevices;
 
     static class ViewHolder {
-        ImageView profilePic;
+        ImageView profilePic, activeStatus;
         TextView userName;
         TextView deviceName;
     }
 
-    public ChildDevicesListAdapter (@NonNull Context context, @NonNull ArrayList<String> arrayList, Map<String, Device> connectedDevicesData) {
+    public ChildDevicesListAdapter (@NonNull Context context, @NonNull ArrayList<String> arrayList, Map<String, Device> connectedDevicesData, ArrayList<String> activeDevices) {
         super(context, R.layout.item_list_connected_devices, arrayList);
 
         firebaseAuth = FirebaseAuth.getInstance();
@@ -48,14 +49,13 @@ public class ChildDevicesListAdapter extends ArrayAdapter<String> {
 
         this.connectedDevices = arrayList;
         this.connectedDevicesData = connectedDevicesData;
-
-        System.out.println(connectedDevicesData);
+        this.activeDevices = activeDevices;
     }
 
     @NonNull
     @Override
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
-        String accountId = connectedDevices.get(position);
+        String accountId = getItem(position);//connectedDevices.get(position);
         Device device = connectedDevicesData.get(accountId);
 
         if (convertView == null) {
@@ -65,6 +65,7 @@ public class ChildDevicesListAdapter extends ArrayAdapter<String> {
             viewHolder.profilePic = convertView.findViewById(R.id.profilePicItem);
             viewHolder.userName = convertView.findViewById(R.id.nameItem);
             viewHolder.deviceName = convertView.findViewById(R.id.deviceNameItem);
+            viewHolder.activeStatus = convertView.findViewById(R.id.activeStatus);
 
             convertView.setTag(viewHolder);
         }
@@ -74,6 +75,8 @@ public class ChildDevicesListAdapter extends ArrayAdapter<String> {
         ViewHolder viewHolder = (ViewHolder) convertView.getTag();
         viewHolder.userName.setText(device.userName);
         viewHolder.deviceName.setText(device.deviceName);
+        viewHolder.activeStatus.setImageResource(R.drawable.green_circle);
+        viewHolder.activeStatus.setVisibility((activeDevices.contains(accountId)) ? View.VISIBLE:View.GONE);
 
         if (device.profilePic.isEmpty()) {
             viewHolder.profilePic.setImageResource(R.drawable.student);

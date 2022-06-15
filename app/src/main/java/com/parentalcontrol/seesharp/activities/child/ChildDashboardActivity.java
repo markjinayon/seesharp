@@ -29,6 +29,7 @@ public class ChildDashboardActivity extends AppCompatActivity {
     private ImageView userImage2;
 
     FirebaseUser firebaseUser;
+    FirebaseAuth firebaseAuth;
     FirebaseDatabase firebaseDatabase;
 
     @Override
@@ -36,7 +37,8 @@ public class ChildDashboardActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_child_dashboard);
 
-        firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+        firebaseAuth = FirebaseAuth.getInstance();
+        firebaseUser = firebaseAuth.getCurrentUser();
         firebaseDatabase = FirebaseDatabase.getInstance();
 
         userImage2 = findViewById(R.id.userImage2);
@@ -74,9 +76,14 @@ public class ChildDashboardActivity extends AppCompatActivity {
                         User user = snapshot.getValue(User.class);
                         if (user == null) return;
 
-                        if (!user.appBlockingState) {
-                            Toast.makeText(getApplicationContext(), "You must enable SeeSharpAccessibilityService!", Toast.LENGTH_LONG).show();
+                        if (!user.appBlockingState && firebaseAuth.getCurrentUser() != null) {
+                            Toast.makeText(getApplicationContext(), "Enable SeeSharp's accessibility service!", Toast.LENGTH_LONG).show();
                             startActivity(new Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_NO_HISTORY));
+                        }
+
+                        if (!user.appTimeLimitState && firebaseAuth.getCurrentUser() != null) {
+                            Toast.makeText(getApplicationContext(), "Enable SeeSharp's usage access!", Toast.LENGTH_LONG).show();
+                            startActivity(new Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_NO_HISTORY));
                         }
 
                         ((TextView) findViewById(R.id.userName)).setText(user.fullName);

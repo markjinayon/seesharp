@@ -56,6 +56,9 @@ public class ConnectedDeviceActivity extends AppCompatActivity {
         webFiltering_connectedDevice = findViewById(R.id.webFiltering_connectedDevice);
         webFiltering_connectedDevice.setOnClickListener(view -> changeWebFilteringState());
 
+        reports_connectedDevice = findViewById(R.id.reports_connectedDevice);
+        reports_connectedDevice.setOnClickListener(view -> openReportsActivity());
+
         firebaseDatabase.getReference("users").child(accountId).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -79,6 +82,12 @@ public class ConnectedDeviceActivity extends AppCompatActivity {
 
             }
         });
+    }
+
+    private void openReportsActivity() {
+        Intent intent = new Intent(this, ReportsActivity.class);
+        intent.putExtra("accountId", accountId);
+        startActivity(intent);
     }
 
     private void changeWebFilteringState() {

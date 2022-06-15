@@ -2,12 +2,18 @@ package com.parentalcontrol.seesharp.services.accessibility;
 
 import android.accessibilityservice.AccessibilityService;
 import android.accessibilityservice.AccessibilityServiceInfo;
+import android.app.AppOpsManager;
 import android.app.usage.UsageStats;
 import android.app.usage.UsageStatsManager;
 import android.content.ActivityNotFoundException;
+import android.content.Context;
 import android.content.Intent;
+import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageManager;
+import android.content.res.AssetManager;
 import android.net.Uri;
 import android.provider.Browser;
+import android.provider.Settings;
 import android.util.Log;
 import android.view.accessibility.AccessibilityEvent;
 import android.view.accessibility.AccessibilityNodeInfo;
@@ -16,132 +22,122 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.parentalcontrol.seesharp.activities.SignInActivity;
 import com.parentalcontrol.seesharp.helper.DeviceHelper;
+import com.parentalcontrol.seesharp.ml.Model;
 import com.parentalcontrol.seesharp.model.User;
 
+//import org.tensorflow.lite.support.model.Model;
+import org.tensorflow.lite.DataType;
+import org.tensorflow.lite.support.tensorbuffer.TensorBuffer;
+
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.nio.ByteBuffer;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
 public class SeeSharpAccessibilityService extends AccessibilityService {
-
-    private static final String TAG = "MyAccessibilityService";
+    private static final String TAG = "SeeSharp Accessibility";
 
     private FirebaseAuth firebaseAuth;
     private FirebaseDatabase firebaseDatabase;
 
     private User user;
 
+    private boolean isActive;
+
     private HashMap<String, Long> previousUrlDetections = new HashMap<>();
+
+    private HashMap<String, Integer> vocabulary = new HashMap<>();
+
+    private int mDebugDepth;
 
     @Override
     protected void onServiceConnected() {
         super.onServiceConnected();
+        Log.e(TAG, "Service connected");
+
         AccessibilityServiceInfo info = new AccessibilityServiceInfo();
         info.eventTypes = AccessibilityEvent.TYPES_ALL_MASK | AccessibilityEvent.TYPE_WINDOW_CONTENT_CHANGED;
-        //info.packageNames = packageNames();
         info.feedbackType = AccessibilityServiceInfo.FEEDBACK_GENERIC | AccessibilityServiceInfo.FEEDBACK_VISUAL;
         info.notificationTimeout = 500;
         info.flags = AccessibilityServiceInfo.FLAG_REPORT_VIEW_IDS | AccessibilityServiceInfo.FLAG_RETRIEVE_INTERACTIVE_WINDOWS;
         setServiceInfo(info);
 
-
+        user = null;
+        isActive = true;
         firebaseAuth = FirebaseAuth.getInstance();
         firebaseDatabase = FirebaseDatabase.getInstance();
 
-        user = null;
-
-        FirebaseUser firebaseUser = firebaseAuth.getCurrentUser();
-
-        if (firebaseUser == null) {
-            startActivity(new Intent(this, SignInActivity.class));
-            stopSelf();
+        if (firebaseAuth.getCurrentUser() == null) {
+            disableSelf();
+            Toast.makeText(getApplicationContext(), "You must sign in first!", Toast.LENGTH_LONG).show();
             return;
         }
 
-        firebaseDatabase.getReference("users")
-                .child(firebaseUser.getUid())
-                .addValueEventListener(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot snapshot) {
-                        user = snapshot.getValue(User.class);
-                        if (user == null) return;
+        firebaseDatabase.getReference("users").child(firebaseAuth.getCurrentUser().getUid()).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                user = snapshot.getValue(User.class);
+                if (user == null) return;
 
-                        if (user.userType.equals("Parent")) {
-                            disableSelf();
-                            stopSelf();
-                            return;
-                        }
+                if (!user.appBlockingState && isActive) {
+                    firebaseDatabase.getReference("users").child(user.accountId).child("appBlockingState").setValue(true);
+                    firebaseDatabase.getReference("users").child(user.accountId).child("appTimeLimitState").setValue(checkUsageAccess());
+                    firebaseDatabase.getReference("users").child(user.accountId).child("webFilteringState").setValue(true);
+                    firebaseDatabase.getReference("users").child(user.accountId).child("installedApplications").setValue(DeviceHelper.getListOfInstalledApps(getApplicationContext()));
+                }
+            }
 
-                        if (!user.appBlockingState) {
-                            changeAppBlockingStatus(true, "Accessibility service is now enabled");
-                            changeAppTimeLimitStatus(true, "");
-                        }
-                    }
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Log.e(TAG, error.getMessage());
+            }
+        });
 
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError error) {
-
-                    }
-                });
-
-
+        initVocab();
+        Toast.makeText(getApplicationContext(), "SeeSharp accessibility enabled", Toast.LENGTH_LONG).show();
     }
 
     @Override
     public void onInterrupt() {
-        Log.e(TAG, "onInterrupt: something went wrong!");
+        Log.e(TAG, "Service on interrupt");
     }
-
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        if (firebaseAuth.getCurrentUser() != null) {
-            changeAppBlockingStatus(false, "Accessibility service is now disabled");
-        }
+        Log.e(TAG, "Service on destroy");
+
+        if (user == null) return;
+
+        firebaseDatabase.getReference("users").child(user.accountId).child("appBlockingState").setValue(false);
+        firebaseDatabase.getReference("users").child(user.accountId).child("appTimeLimitState").setValue(false);
+        firebaseDatabase.getReference("users").child(user.accountId).child("webFilteringState").setValue(false);
+
+        isActive = false;
+        Toast.makeText(getApplicationContext(), "SeeSharp accessibility disabled", Toast.LENGTH_LONG).show();
     }
 
     @Override
     public void onAccessibilityEvent(AccessibilityEvent accessibilityEvent) {
-        if (firebaseAuth.getCurrentUser() == null) {
+        if (firebaseAuth.getCurrentUser() == null || !isActive) {
             disableSelf();
             return;
         }
 
-        if (user == null) {
-            if (firebaseAuth.getCurrentUser() == null) {
-                startActivity(new Intent(this, SignInActivity.class));
-                stopSelf();
-                return;
-            }
-
-            firebaseDatabase.getReference("users")
-                    .child(firebaseAuth.getCurrentUser().getUid())
-                    .addValueEventListener(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(@NonNull DataSnapshot snapshot) {
-                            user = snapshot.getValue(User.class);
-                            if (user == null) return;
-                            if (!user.appBlockingState) {
-                                changeAppBlockingStatus(true, "Accessibility service is now enabled");
-                                changeAppTimeLimitStatus(true, "");
-                            }
-                        }
-
-                        @Override
-                        public void onCancelled(@NonNull DatabaseError error) {
-
-                        }
-                    });
-            return;
-        }
+        monitorTexts(accessibilityEvent);
 
         if (accessibilityEvent.getPackageName() == null ) {
             return;
@@ -149,14 +145,16 @@ public class SeeSharpAccessibilityService extends AccessibilityService {
 
         String packageName = accessibilityEvent.getPackageName().toString();
 
-        if (!user.installedApplications.contains(packageName)) return;
-
         if (user.appBlockingState) {
             checkAppBlocking(packageName);
         }
 
         if (user.appTimeLimitState) {
             checkScreenTimeLimit(packageName);
+        } else {
+            Toast.makeText(getApplicationContext(), "Enable SeeSharp's usage access!", Toast.LENGTH_LONG).show();
+            startActivity(new Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_NO_HISTORY));
+            firebaseDatabase.getReference("users").child(user.accountId).child("appTimeLimitState").setValue(checkUsageAccess());
         }
 
         if (user.webFilteringState) {
@@ -167,6 +165,77 @@ public class SeeSharpAccessibilityService extends AccessibilityService {
             }
         }
 
+        makePredictions("im so sad");
+    }
+
+    private void initVocab() {
+        try {
+            AssetManager am = getAssets();
+            InputStream is = am.open("vocab.txt");
+            BufferedReader br=new BufferedReader(new InputStreamReader(is));
+            String line;
+            int i = 1;
+            while((line=br.readLine())!=null) {
+                    vocabulary.put(line, i++);
+            }
+            System.out.println(vocabulary);
+        }
+        catch(IOException e)
+        {
+            e.printStackTrace();
+        }
+    }
+
+    private void monitorTexts(AccessibilityEvent accessibilityEvent) {
+        mDebugDepth = 0;
+        AccessibilityNodeInfo mNodeInfo = accessibilityEvent.getSource();
+        printAllViews(mNodeInfo);
+    }
+
+    private void printAllViews(AccessibilityNodeInfo mNodeInfo) {
+        if (mNodeInfo == null) return;
+        String log ="";
+        for (int i = 0; i < mDebugDepth; i++) {
+            log += ".";
+        }
+        log+="("+mNodeInfo.getText() +" <-- "+
+                mNodeInfo.getViewIdResourceName()+")";
+        Log.d(TAG, log);
+        if (mNodeInfo.getChildCount() < 1) return;
+        mDebugDepth++;
+
+        for (int i = 0; i < mNodeInfo.getChildCount(); i++) {
+            printAllViews(mNodeInfo.getChild(i));
+        }
+        mDebugDepth--;
+    }
+
+    private void makePredictions(String text) {
+        try {
+            Model model = Model.newInstance(getApplicationContext());
+
+            // Creates inputs for reference.
+            TensorBuffer inputFeature0 = TensorBuffer.createFixedSize(new int[]{1, 200}, DataType.FLOAT32);
+            ByteBuffer byteBuffer = ByteBuffer.allocate(text.length());
+            int[] input = new int[]{1, 200};
+            String[] words = text.split(" ");
+            for (int i = 0; i < 200; i++) {
+                byteBuffer.putInt(vocabulary.get(words[i]));
+            }
+            inputFeature0.loadBuffer(byteBuffer);
+
+            // Runs model inference and gets result.
+            Model.Outputs outputs = model.process(inputFeature0);
+            TensorBuffer outputFeature0 = outputs.getOutputFeature0AsTensorBuffer();
+
+            float[] confidences = outputFeature0.getFloatArray();
+            System.out.println(confidences);
+
+            // Releases model resources if no longer used.
+            model.close();
+        } catch (IOException e) {
+            // TODO Handle the exception
+        }
     }
 
     private void checkWebFilter(AccessibilityEvent accessibilityEvent, String packageName) {
@@ -207,7 +276,7 @@ public class SeeSharpAccessibilityService extends AccessibilityService {
 
         for (String word: keywords) {
             if (capturedUrl.contains(word) && (capturedUrl.contains(".net") || capturedUrl.contains(".com"))) {
-                addToNotifications("WebFiltering", "Tried to access " + capturedUrl);
+                addToNotifications("Website Filtering", "Tried to access " + capturedUrl);
                 performRedirect(redirectUrl, browserPackage);
             }
         }
@@ -264,72 +333,37 @@ public class SeeSharpAccessibilityService extends AccessibilityService {
         return url;
     }
 
-    public void checkAppBlocking(String packageName) {
+    private void checkAppBlocking(String packageName) {
         if (isOnBlockedApps(packageName)) {
-            addToNotifications("AppBlocking", "Tried to open " + packageName);
+            addToNotifications("Application Blocking", "Tried to open " + packageName);
             takeToHomeScreen();
             Toast.makeText(SeeSharpAccessibilityService.this, "You tried to open a blocked application!", Toast.LENGTH_LONG).show();
         }
     }
 
-    public void checkScreenTimeLimit(String packageName) {
+    private void checkScreenTimeLimit(String packageName) {
         String timeLimit = hasTimeLimit(packageName);
 
         if (timeLimit.isEmpty()) return;
 
-        System.out.println("dumaan");
         long appTimeLimit = Integer.parseInt(timeLimit) * 3600000L;
         UsageStatsManager usageStatsManager = (UsageStatsManager) getSystemService(USAGE_STATS_SERVICE);
         List<UsageStats> appList = usageStatsManager.queryUsageStats(UsageStatsManager.INTERVAL_DAILY,  System.currentTimeMillis() - 1000*3600*24,  System.currentTimeMillis());
 
         for (UsageStats app: appList) {
-            if (app.getPackageName().equals(packageName)) System.out.println(app.getTotalTimeInForeground());
-            if (app.getPackageName().equals(packageName) && app.getTotalTimeInForeground() >= 10) {
+            if (app.getPackageName().equals(packageName) && app.getTotalTimeInForeground() >= appTimeLimit) {
                 takeToHomeScreen();
                 Toast.makeText(SeeSharpAccessibilityService.this, "Application already reached its time limit!", Toast.LENGTH_LONG).show();
-                addToNotifications("ScreenTimeLimit", packageName+" reached its time limit");
+                addToNotifications("Screen Application Time Limit", packageName+" reached its time limit");
             }
         }
     }
 
-    public void changeAppBlockingStatus(boolean state, String message) {
-        firebaseDatabase.getReference("users")
-                .child(user.accountId)
-                .child("appBlockingState")
-                .setValue(state)
-                .addOnCompleteListener(task -> {
-                    if (task.isSuccessful()) {
-                        Toast.makeText(SeeSharpAccessibilityService.this, message, Toast.LENGTH_LONG).show();
-                        updateInstalledApplications();
-                    }
-                });
-    }
-
-    public void changeAppTimeLimitStatus(boolean state, String message) {
-        firebaseDatabase.getReference("users")
-                .child(user.accountId)
-                .child("appTimeLimitState")
-                .setValue(state)
-                .addOnCompleteListener(task -> {
-                    if (task.isSuccessful()) {
-                        Toast.makeText(SeeSharpAccessibilityService.this, message, Toast.LENGTH_LONG).show();
-                        updateInstalledApplications();
-                    }
-                });
-    }
-
-    public void updateInstalledApplications() {
-        firebaseDatabase.getReference("users")
-                .child(user.accountId)
-                .child("installedApplications")
-                .setValue(DeviceHelper.getListOfInstalledApps(getApplicationContext()));
-    }
-
-    public boolean isOnBlockedApps(String packageName) {
+    private boolean isOnBlockedApps(String packageName) {
         return user != null && user.blockedApplications.contains(packageName);
     }
 
-    public String hasTimeLimit(String packageName) {
+    private String hasTimeLimit(String packageName) {
         if (user == null) return "";
 
         for (String app: user.appTimeLimits) {
@@ -340,7 +374,7 @@ public class SeeSharpAccessibilityService extends AccessibilityService {
         return "";
     }
 
-    public void takeToHomeScreen() {
+    private void takeToHomeScreen() {
         Intent startMain = new Intent(Intent.ACTION_MAIN);
         startMain.addCategory(Intent.CATEGORY_HOME);
         startMain.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -348,11 +382,24 @@ public class SeeSharpAccessibilityService extends AccessibilityService {
     }
 
     private void addToNotifications(String activity, String message) {
-        Long tsLong = System.currentTimeMillis()/1000;
-        String ts = tsLong.toString();
-        firebaseDatabase.getReference("notification")
+        ZonedDateTime zdt = ZonedDateTime.now(ZoneId.of("Asia/Manila"));
+        firebaseDatabase.getReference("reports")
                 .child(firebaseAuth.getUid())
-                .child(ts)
+                .child(zdt.toString().replaceAll("\\.", ",").replaceAll("\\[", "{").replaceAll("]", "}").replaceAll("/", "|"))
                 .setValue(activity+"::"+message);
+    }
+
+    private boolean checkUsageAccess() {
+        Context context = getApplicationContext();
+        try {
+            PackageManager packageManager = context.getPackageManager();
+            ApplicationInfo applicationInfo = packageManager.getApplicationInfo(context.getPackageName(), 0);
+            AppOpsManager appOpsManager = (AppOpsManager) context.getSystemService(Context.APP_OPS_SERVICE);
+            int mode = appOpsManager.checkOpNoThrow(AppOpsManager.OPSTR_GET_USAGE_STATS, applicationInfo.uid, applicationInfo.packageName);
+            return (mode == AppOpsManager.MODE_ALLOWED);
+
+        } catch (PackageManager.NameNotFoundException e) {
+            return false;
+        }
     }
 }
