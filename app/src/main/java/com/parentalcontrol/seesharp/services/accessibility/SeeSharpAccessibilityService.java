@@ -27,20 +27,21 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.parentalcontrol.seesharp.helper.DeviceHelper;
+
 import com.parentalcontrol.seesharp.ml.Model;
 import com.parentalcontrol.seesharp.model.User;
 
 //import org.tensorflow.lite.support.model.Model;
+import org.checkerframework.checker.units.qual.A;
 import org.tensorflow.lite.DataType;
 import org.tensorflow.lite.support.tensorbuffer.TensorBuffer;
 
 import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
@@ -164,8 +165,6 @@ public class SeeSharpAccessibilityService extends AccessibilityService {
                 }
             }
         }
-
-        makePredictions("im so sad");
     }
 
     private void initVocab() {
@@ -198,9 +197,14 @@ public class SeeSharpAccessibilityService extends AccessibilityService {
         for (int i = 0; i < mDebugDepth; i++) {
             log += ".";
         }
+
+        if (mNodeInfo.getText() != null) {
+            makePredictions(mNodeInfo.getText().toString());
+        }
+
         log+="("+mNodeInfo.getText() +" <-- "+
                 mNodeInfo.getViewIdResourceName()+")";
-        Log.d(TAG, log);
+        //Log.d(TAG, log);
         if (mNodeInfo.getChildCount() < 1) return;
         mDebugDepth++;
 
@@ -211,25 +215,47 @@ public class SeeSharpAccessibilityService extends AccessibilityService {
     }
 
     private void makePredictions(String text) {
+        System.out.print(text + " = ");
         try {
+            String[] words = text.toLowerCase().split(" ");
+
             Model model = Model.newInstance(getApplicationContext());
 
-            // Creates inputs for reference.
             TensorBuffer inputFeature0 = TensorBuffer.createFixedSize(new int[]{1, 200}, DataType.FLOAT32);
-            ByteBuffer byteBuffer = ByteBuffer.allocate(text.length());
-            int[] input = new int[]{1, 200};
-            String[] words = text.split(" ");
+
+            ByteBuffer byteBuffer = ByteBuffer.allocate(200*4);
+            byteBuffer.order(ByteOrder.nativeOrder());
+            ArrayList<Integer> shit = new ArrayList<>();
             for (int i = 0; i < 200; i++) {
-                byteBuffer.putInt(vocabulary.get(words[i]));
+                try {
+                    byteBuffer.putInt(vocabulary.get(words[i]));
+                    shit.add(vocabulary.get(words[i]));
+                } catch (Exception e) {
+                    byteBuffer.putInt(0);
+                    shit.add(0);
+                }
             }
+
+            System.out.println(shit);
             inputFeature0.loadBuffer(byteBuffer);
+
 
             // Runs model inference and gets result.
             Model.Outputs outputs = model.process(inputFeature0);
             TensorBuffer outputFeature0 = outputs.getOutputFeature0AsTensorBuffer();
 
-            float[] confidences = outputFeature0.getFloatArray();
-            System.out.println(confidences);
+            float[] results = outputFeature0.getFloatArray();
+            for (float i: results) {
+                System.out.print(i + ", ");
+            }
+            String[] labels = {"", "suicide", "cyberbullying", "nsfw"};
+            int high = 0;
+            for (int i = 1; i < labels.length; i++) {
+                if (results[0] < results[i]) {
+                    high = i;
+                }
+            }
+            System.out.println("Prediction: " + labels[high]);
 
             // Releases model resources if no longer used.
             model.close();

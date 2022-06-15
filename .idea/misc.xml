@@ -33,6 +33,7 @@
         <entry key="..\:/JEM FILES/4TH/SeeSharp/app/src/main/res/layout/activity_blocked_applications.xml" value="0.264" />
         <entry key="..\:/JEM FILES/4TH/SeeSharp/app/src/main/res/layout/activity_check_screentime.xml" value="0.264" />
         <entry key="..\:/JEM FILES/4TH/SeeSharp/app/src/main/res/layout/activity_child_about_us.xml" value="0.264" />
+        <entry key="..\:/JEM FILES/4TH/SeeSharp/app/src/main/res/layout/activity_child_ai_assistant.xml" value="0.23641304347826086" />
         <entry key="..\:/JEM FILES/4TH/SeeSharp/app/src/main/res/layout/activity_child_change_pin.xml" value="0.2339154411764706" />
         <entry key="..\:/JEM FILES/4TH/SeeSharp/app/src/main/res/layout/activity_child_confirm_pin.xml" value="0.23052536231884058" />
         <entry key="..\:/JEM FILES/4TH/SeeSharp/app/src/main/res/layout/activity_child_dashboard.xml" value="0.264" />
@@ -45,6 +46,7 @@
         <entry key="..\:/JEM FILES/4TH/SeeSharp/app/src/main/res/layout/activity_main.xml" value="0.25" />
         <entry key="..\:/JEM FILES/4TH/SeeSharp/app/src/main/res/layout/activity_notifications.xml" value="0.264" />
         <entry key="..\:/JEM FILES/4TH/SeeSharp/app/src/main/res/layout/activity_parent_about_us.xml" value="0.23052536231884058" />
+        <entry key="..\:/JEM FILES/4TH/SeeSharp/app/src/main/res/layout/activity_parent_ai_assistant.xml" value="0.2359375" />
         <entry key="..\:/JEM FILES/4TH/SeeSharp/app/src/main/res/layout/activity_parent_change_pin.xml" value="0.23052536231884058" />
         <entry key="..\:/JEM FILES/4TH/SeeSharp/app/src/main/res/layout/activity_parent_confirm_pin.xml" value="0.23052536231884058" />
         <entry key="..\:/JEM FILES/4TH/SeeSharp/app/src/main/res/layout/activity_parent_dashboard.xml" value="0.264" />
@@ -56,6 +58,8 @@
         <entry key="..\:/JEM FILES/4TH/SeeSharp/app/src/main/res/layout/activity_screen_time.xml" value="0.264" />
         <entry key="..\:/JEM FILES/4TH/SeeSharp/app/src/main/res/layout/activity_sign_in.xml" value="0.264" />
         <entry key="..\:/JEM FILES/4TH/SeeSharp/app/src/main/res/layout/activity_sign_up.xml" value="0.264" />
+        <entry key="..\:/JEM FILES/4TH/SeeSharp/app/src/main/res/layout/item_list_ai_child.xml" value="0.23641304347826086" />
+        <entry key="..\:/JEM FILES/4TH/SeeSharp/app/src/main/res/layout/item_list_ai_parent.xml" value="0.23641304347826086" />
         <entry key="..\:/JEM FILES/4TH/SeeSharp/app/src/main/res/layout/item_list_app_blocking.xml" value="0.264" />
         <entry key="..\:/JEM FILES/4TH/SeeSharp/app/src/main/res/layout/item_list_blocked_app.xml" value="0.23052536231884058" />
         <entry key="..\:/JEM FILES/4TH/SeeSharp/app/src/main/res/layout/item_list_check_screentime.xml" value="0.23052536231884058" />
