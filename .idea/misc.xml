@@ -8,7 +8,6 @@
         <entry key="..\:/JEM FILES/4TH/SeeSharp/app/src/main/res/drawable-anydpi/ic_webFiltering.xml" value="0.12" />
         <entry key="..\:/JEM FILES/4TH/SeeSharp/app/src/main/res/drawable/circle.xml" value="0.2555" />
         <entry key="..\:/JEM FILES/4TH/SeeSharp/app/src/main/res/drawable/filled_circle.xml" value="0.2545" />
-        <entry key="..\:/JEM FILES/4TH/SeeSharp/app/src/main/res/drawable/green_circle.xml" value="0.1365" />
         <entry key="..\:/JEM FILES/4TH/SeeSharp/app/src/main/res/drawable/ic_ai.xml" value="0.179" />
         <entry key="..\:/JEM FILES/4TH/SeeSharp/app/src/main/res/drawable/ic_ai1.xml" value="0.2555" />
         <entry key="..\:/JEM FILES/4TH/SeeSharp/app/src/main/res/drawable/ic_android.xml" value="0.179" />
@@ -70,6 +69,24 @@
         <entry key="..\:/JEM FILES/4TH/SeeSharp/app/src/main/res/layout/string.xml" value="0.22282608695652173" />
         <entry key="..\:/JEM FILES/4TH/SeeSharp/app/src/main/res/layout/testing.xml" value="0.24895833333333334" />
         <entry key="..\:/Users/Jezreel Bitgue/Downloads/SeeSharp/app/src/main/res/layout/activity_lock.xml" value="0.2" />
+        <entry key="..\:/Users/Sam/StudioProjects/seesharp/app/src/main/res/layout/activity_application_blocking.xml" value="0.24547101449275363" />
+        <entry key="..\:/Users/Sam/StudioProjects/seesharp/app/src/main/res/layout/activity_blocked_applications.xml" value="0.24547101449275363" />
+        <entry key="..\:/Users/Sam/StudioProjects/seesharp/app/src/main/res/layout/activity_check_screentime.xml" value="0.24547101449275363" />
+        <entry key="..\:/Users/Sam/StudioProjects/seesharp/app/src/main/res/layout/activity_child_ai_assistant.xml" value="0.24547101449275363" />
+        <entry key="..\:/Users/Sam/StudioProjects/seesharp/app/src/main/res/layout/activity_child_dashboard.xml" value="0.24547101449275363" />
+        <entry key="..\:/Users/Sam/StudioProjects/seesharp/app/src/main/res/layout/activity_connected_device.xml" value="0.24547101449275363" />
+        <entry key="..\:/Users/Sam/StudioProjects/seesharp/app/src/main/res/layout/activity_parent_ai_assistant.xml" value="0.24547101449275363" />
+        <entry key="..\:/Users/Sam/StudioProjects/seesharp/app/src/main/res/layout/activity_parent_logout.xml" value="0.24547101449275363" />
+        <entry key="..\:/Users/Sam/StudioProjects/seesharp/app/src/main/res/layout/activity_pin_lockscreen.xml" value="0.24547101449275363" />
+        <entry key="..\:/Users/Sam/StudioProjects/seesharp/app/src/main/res/layout/activity_reports.xml" value="0.24547101449275363" />
+        <entry key="..\:/Users/Sam/StudioProjects/seesharp/app/src/main/res/layout/activity_screen_time.xml" value="0.24547101449275363" />
+        <entry key="..\:/Users/Sam/StudioProjects/seesharp/app/src/main/res/layout/activity_sign_in.xml" value="0.24547101449275363" />
+        <entry key="..\:/Users/Sam/StudioProjects/seesharp/app/src/main/res/layout/item_list_ai_child.xml" value="0.24547101449275363" />
+        <entry key="..\:/Users/Sam/StudioProjects/seesharp/app/src/main/res/layout/item_list_ai_parent.xml" value="0.24547101449275363" />
+        <entry key="..\:/Users/Sam/StudioProjects/seesharp/app/src/main/res/layout/item_list_app_blocking.xml" value="0.24547101449275363" />
+        <entry key="..\:/Users/Sam/StudioProjects/seesharp/app/src/main/res/layout/item_list_blocked_app.xml" value="0.24547101449275363" />
+        <entry key="..\:/Users/Sam/StudioProjects/seesharp/app/src/main/res/layout/item_list_connected_devices.xml" value="0.24547101449275363" />
+        <entry key="..\:/Users/Sam/StudioProjects/seesharp/app/src/main/res/layout/item_list_reports.xml" value="0.24547101449275363" />
         <entry key="..\:/Users/jinay/Desktop/SeeSharp/app/src/main/res/layout/activity_application_blocking.xml" value="0.36666666666666664" />
         <entry key="..\:/Users/jinay/Desktop/SeeSharp/app/src/main/res/layout/activity_child_dashboard.xml" value="0.36666666666666664" />
         <entry key="..\:/Users/jinay/Desktop/SeeSharp/app/src/main/res/layout/activity_parent_dashboard.xml" value="0.36666666666666664" />
