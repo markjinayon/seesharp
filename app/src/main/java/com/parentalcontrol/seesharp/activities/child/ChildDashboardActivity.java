@@ -25,7 +25,7 @@ import android.widget.Toast;
 
 public class ChildDashboardActivity extends AppCompatActivity {
 
-    private CardView appBlocking_childDashboard, screenTimeLimit_childDashboard, webFiltering_childDashboard, settings_childDashboard;
+    private CardView appBlocking_childDashboard, screenTimeLimit_childDashboard, webFiltering_childDashboard, aiAssistant_childDashboard, settings_childDashboard;
     private ImageView userImage2;
 
     FirebaseUser firebaseUser;
@@ -48,6 +48,9 @@ public class ChildDashboardActivity extends AppCompatActivity {
 
         screenTimeLimit_childDashboard = findViewById(R.id.screenTimeLimit_childDashboard);
         screenTimeLimit_childDashboard.setOnClickListener(view -> openScreenTimeActivity());
+
+        aiAssistant_childDashboard = findViewById(R.id.aiAssistant_childDashboard);
+        aiAssistant_childDashboard.setOnClickListener(view -> openAiAssistantActivity());
 
         webFiltering_childDashboard = findViewById(R.id.webFiltering_childDashboard);
         webFiltering_childDashboard.setOnClickListener(view -> changeWebFilteringState());
@@ -103,6 +106,10 @@ public class ChildDashboardActivity extends AppCompatActivity {
                     }
                 });
 
+    }
+
+    private void openAiAssistantActivity() {
+        startActivity(new Intent(this, ChildAiAssistantActivity.class));
     }
 
     private void updateDeviceName() {

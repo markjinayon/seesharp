@@ -36,7 +36,7 @@
     </LinearLayout>
 
     <ListView
-        android:id="@+id/aiAssistant_childDashboard"
+        android:id="@+id/listPredictions_childDashboard"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginTop="5dp"

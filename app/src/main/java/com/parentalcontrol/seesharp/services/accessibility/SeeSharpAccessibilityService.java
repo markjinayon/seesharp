@@ -20,6 +20,12 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -29,11 +35,14 @@ import com.parentalcontrol.seesharp.helper.DeviceHelper;
 
 import com.parentalcontrol.seesharp.model.User;
 
+import org.json.JSONObject;
+
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class SeeSharpAccessibilityService extends AccessibilityService {
     private static final String TAG = "SeeSharp Accessibility";
@@ -51,6 +60,9 @@ public class SeeSharpAccessibilityService extends AccessibilityService {
 
     private ArrayList<String> appsToMonitorText;
 
+    final String URL = "https://seesharp-thesis.herokuapp.com/predict";
+    private RequestQueue requestQueue;
+
     private int mDebugDepth;
 
     @Override
@@ -65,6 +77,7 @@ public class SeeSharpAccessibilityService extends AccessibilityService {
         info.flags = AccessibilityServiceInfo.FLAG_REPORT_VIEW_IDS | AccessibilityServiceInfo.FLAG_RETRIEVE_INTERACTIVE_WINDOWS;
         setServiceInfo(info);
 
+        requestQueue = Volley.newRequestQueue(getApplicationContext());
         previousUrlDetections = new HashMap<>();
         user = null;
         isActive = true;
@@ -139,7 +152,7 @@ public class SeeSharpAccessibilityService extends AccessibilityService {
             return;
         }
 
-        if (accessibilityEvent.getPackageName() == null ) {
+        if (accessibilityEvent.getPackageName() == null || user == null) {
             return;
         }
 
@@ -177,9 +190,7 @@ public class SeeSharpAccessibilityService extends AccessibilityService {
     private void monitorTexts(AccessibilityEvent accessibilityEvent) {
         mDebugDepth = 0;
         AccessibilityNodeInfo mNodeInfo = accessibilityEvent.getSource();
-        //Log.e("Text Monitoring", "START");
         printAllViews(mNodeInfo);
-        //Log.e("Text Monitoring", "END");
     }
 
     private void printAllViews(AccessibilityNodeInfo mNodeInfo) {
@@ -211,7 +222,30 @@ public class SeeSharpAccessibilityService extends AccessibilityService {
 
                 if (shouldAdd && !detectedTexts.get(packageName).contains(text)) {
                     detectedTexts.get(packageName).add(text);
-                    Log.e(packageName, text);
+                    StringRequest stringRequest = new StringRequest(Request.Method.POST, URL,
+                            response -> {
+                                try {
+                                    JSONObject jsonObject = new JSONObject(response);
+                                    String prediction = jsonObject.getString("prediction");
+                                    Log.e(packageName, text + " >> " + prediction);
+                                    if (!prediction.equals("neutral")) {
+                                        firebaseDatabase.getReference("predictions").child(user.accountId).child(text).setValue(packageName + "::" +prediction);
+                                    }
+                                } catch (Exception e) {
+
+                                }
+                            }, error -> {
+
+                            }){
+                        @Override
+                        protected Map<String, String> getParams() {
+                            Map<String, String> params = new HashMap<>();
+                            params.put("entry", text);
+                            return params;
+                        }
+                    };
+
+                    requestQueue.add(stringRequest);
                 }
 
             }
