@@ -10,7 +10,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
-import android.content.res.AssetManager;
 import android.net.Uri;
 import android.provider.Browser;
 import android.provider.Settings;
@@ -28,20 +27,8 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.parentalcontrol.seesharp.helper.DeviceHelper;
 
-import com.parentalcontrol.seesharp.ml.Model;
 import com.parentalcontrol.seesharp.model.User;
 
-//import org.tensorflow.lite.support.model.Model;
-import org.checkerframework.checker.units.qual.A;
-import org.tensorflow.lite.DataType;
-import org.tensorflow.lite.support.tensorbuffer.TensorBuffer;
-
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.nio.ByteBuffer;
-import java.nio.ByteOrder;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
@@ -58,9 +45,11 @@ public class SeeSharpAccessibilityService extends AccessibilityService {
 
     private boolean isActive;
 
-    private HashMap<String, Long> previousUrlDetections = new HashMap<>();
+    private HashMap<String, Long> previousUrlDetections;
 
-    private HashMap<String, Integer> vocabulary = new HashMap<>();
+    private HashMap<String, ArrayList<String>> detectedTexts;
+
+    private ArrayList<String> appsToMonitorText;
 
     private int mDebugDepth;
 
@@ -76,10 +65,23 @@ public class SeeSharpAccessibilityService extends AccessibilityService {
         info.flags = AccessibilityServiceInfo.FLAG_REPORT_VIEW_IDS | AccessibilityServiceInfo.FLAG_RETRIEVE_INTERACTIVE_WINDOWS;
         setServiceInfo(info);
 
+        previousUrlDetections = new HashMap<>();
         user = null;
         isActive = true;
         firebaseAuth = FirebaseAuth.getInstance();
         firebaseDatabase = FirebaseDatabase.getInstance();
+
+        // add apps to monitor text
+        appsToMonitorText = new ArrayList<>();
+        appsToMonitorText.add("com.facebook.orca");
+        appsToMonitorText.add("com.google.android.apps.messaging");
+        appsToMonitorText.add("com.facebook.katana");
+
+        // create empty array list every apps
+        detectedTexts = new HashMap<>();
+        for (String app: appsToMonitorText) {
+            detectedTexts.put(app, new ArrayList<>());
+        }
 
         if (firebaseAuth.getCurrentUser() == null) {
             disableSelf();
@@ -107,7 +109,6 @@ public class SeeSharpAccessibilityService extends AccessibilityService {
             }
         });
 
-        initVocab();
         Toast.makeText(getApplicationContext(), "SeeSharp accessibility enabled", Toast.LENGTH_LONG).show();
     }
 
@@ -138,24 +139,30 @@ public class SeeSharpAccessibilityService extends AccessibilityService {
             return;
         }
 
-        monitorTexts(accessibilityEvent);
-
         if (accessibilityEvent.getPackageName() == null ) {
             return;
         }
 
         String packageName = accessibilityEvent.getPackageName().toString();
 
-        if (user.appBlockingState) {
-            checkAppBlocking(packageName);
+        //Log.e(packageName, AccessibilityEvent.eventTypeToString(accessibilityEvent.getEventType()));
+
+        if (accessibilityEvent.getEventType() == AccessibilityEvent.TYPE_WINDOW_CONTENT_CHANGED) {
+            monitorTexts(accessibilityEvent);
         }
 
-        if (user.appTimeLimitState) {
-            checkScreenTimeLimit(packageName);
-        } else {
-            Toast.makeText(getApplicationContext(), "Enable SeeSharp's usage access!", Toast.LENGTH_LONG).show();
-            startActivity(new Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_NO_HISTORY));
-            firebaseDatabase.getReference("users").child(user.accountId).child("appTimeLimitState").setValue(checkUsageAccess());
+        if (accessibilityEvent.getEventType() == AccessibilityEvent.TYPE_WINDOW_STATE_CHANGED) {
+            if (user.appBlockingState) {
+                checkAppBlocking(packageName);
+            }
+
+            if (user.appTimeLimitState) {
+                checkScreenTimeLimit(packageName);
+            } else {
+                Toast.makeText(getApplicationContext(), "Enable SeeSharp's usage access!", Toast.LENGTH_LONG).show();
+                startActivity(new Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_NO_HISTORY));
+                firebaseDatabase.getReference("users").child(user.accountId).child("appTimeLimitState").setValue(checkUsageAccess());
+            }
         }
 
         if (user.webFilteringState) {
@@ -167,44 +174,53 @@ public class SeeSharpAccessibilityService extends AccessibilityService {
         }
     }
 
-    private void initVocab() {
-        try {
-            AssetManager am = getAssets();
-            InputStream is = am.open("vocab.txt");
-            BufferedReader br=new BufferedReader(new InputStreamReader(is));
-            String line;
-            int i = 1;
-            while((line=br.readLine())!=null) {
-                    vocabulary.put(line, i++);
-            }
-            System.out.println(vocabulary);
-        }
-        catch(IOException e)
-        {
-            e.printStackTrace();
-        }
-    }
-
     private void monitorTexts(AccessibilityEvent accessibilityEvent) {
         mDebugDepth = 0;
         AccessibilityNodeInfo mNodeInfo = accessibilityEvent.getSource();
+        //Log.e("Text Monitoring", "START");
         printAllViews(mNodeInfo);
+        //Log.e("Text Monitoring", "END");
     }
 
     private void printAllViews(AccessibilityNodeInfo mNodeInfo) {
         if (mNodeInfo == null) return;
+
         String log ="";
         for (int i = 0; i < mDebugDepth; i++) {
             log += ".";
         }
 
-        if (mNodeInfo.getText() != null) {
-            makePredictions(mNodeInfo.getText().toString());
+        if (mNodeInfo.getPackageName() != null) {
+            String packageName = mNodeInfo.getPackageName().toString();
+            boolean shouldAdd = false;
+
+            if (appsToMonitorText.contains(packageName) && mNodeInfo.getText() != null) {
+                String text = mNodeInfo.getText().toString();
+
+                if (packageName.equals("com.facebook.orca") && log.contains("...") && !(text.contains("PM") || text.contains("AM"))) {
+                    shouldAdd = true;
+                } else if (packageName.equals("com.facebook.katana") && log.equals("")
+                    && !text.contains("reactions") && !text.contains("comments") && !text.contains("shares")
+                    && !text.contains("Reply") && !text.contains("Like")) {
+                    shouldAdd = true;
+                } else if (packageName.equals("com.google.android.apps.messaging")
+                        && mNodeInfo.getViewIdResourceName() != null
+                        && mNodeInfo.getViewIdResourceName().equals("com.google.android.apps.messaging:id/compose_message_text")) {
+                    shouldAdd = true;
+                }
+
+                if (shouldAdd && !detectedTexts.get(packageName).contains(text)) {
+                    detectedTexts.get(packageName).add(text);
+                    Log.e(packageName, text);
+                }
+
+            }
         }
 
-        log+="("+mNodeInfo.getText() +" <-- "+
-                mNodeInfo.getViewIdResourceName()+")";
-        //Log.d(TAG, log);
+
+//        log+="("+mNodeInfo.getText() +" <-- "+ mNodeInfo.getViewIdResourceName()+ "<--" + mNodeInfo.getPackageName() + ")";
+//        Log.d(TAG, log);
+
         if (mNodeInfo.getChildCount() < 1) return;
         mDebugDepth++;
 
@@ -214,55 +230,7 @@ public class SeeSharpAccessibilityService extends AccessibilityService {
         mDebugDepth--;
     }
 
-    private void makePredictions(String text) {
-        System.out.print(text + " = ");
-        try {
-            String[] words = text.toLowerCase().split(" ");
 
-            Model model = Model.newInstance(getApplicationContext());
-
-            TensorBuffer inputFeature0 = TensorBuffer.createFixedSize(new int[]{1, 200}, DataType.FLOAT32);
-
-            ByteBuffer byteBuffer = ByteBuffer.allocate(200*4);
-            byteBuffer.order(ByteOrder.nativeOrder());
-            ArrayList<Integer> shit = new ArrayList<>();
-            for (int i = 0; i < 200; i++) {
-                try {
-                    byteBuffer.putInt(vocabulary.get(words[i]));
-                    shit.add(vocabulary.get(words[i]));
-                } catch (Exception e) {
-                    byteBuffer.putInt(0);
-                    shit.add(0);
-                }
-            }
-
-            System.out.println(shit);
-            inputFeature0.loadBuffer(byteBuffer);
-
-
-            // Runs model inference and gets result.
-            Model.Outputs outputs = model.process(inputFeature0);
-            TensorBuffer outputFeature0 = outputs.getOutputFeature0AsTensorBuffer();
-
-            float[] results = outputFeature0.getFloatArray();
-            for (float i: results) {
-                System.out.print(i + ", ");
-            }
-            String[] labels = {"", "suicide", "cyberbullying", "nsfw"};
-            int high = 0;
-            for (int i = 1; i < labels.length; i++) {
-                if (results[0] < results[i]) {
-                    high = i;
-                }
-            }
-            System.out.println("Prediction: " + labels[high]);
-
-            // Releases model resources if no longer used.
-            model.close();
-        } catch (IOException e) {
-            // TODO Handle the exception
-        }
-    }
 
     private void checkWebFilter(AccessibilityEvent accessibilityEvent, String packageName) {
         AccessibilityNodeInfo parentNodeInfo = accessibilityEvent.getSource();
@@ -298,7 +266,7 @@ public class SeeSharpAccessibilityService extends AccessibilityService {
 
     private void analyzeCapturedUrl(String capturedUrl, String browserPackage) {
         String redirectUrl = "https://www.google.com/";
-        String[] keywords = {"sex", "porn", "xxx", "hentai", "xvid", "nsfw"};
+        String[] keywords = {"sex", "porn", "xxx", "hentai", "xvid", "nsfw", "onlyfans"};
 
         for (String word: keywords) {
             if (capturedUrl.contains(word) && (capturedUrl.contains(".net") || capturedUrl.contains(".com"))) {
@@ -408,9 +376,11 @@ public class SeeSharpAccessibilityService extends AccessibilityService {
     }
 
     private void addToNotifications(String activity, String message) {
+        if (firebaseAuth.getCurrentUser() == null) return;
+
         ZonedDateTime zdt = ZonedDateTime.now(ZoneId.of("Asia/Manila"));
         firebaseDatabase.getReference("reports")
-                .child(firebaseAuth.getUid())
+                .child(firebaseAuth.getCurrentUser().getUid())
                 .child(zdt.toString().replaceAll("\\.", ",").replaceAll("\\[", "{").replaceAll("]", "}").replaceAll("/", "|"))
                 .setValue(activity+"::"+message);
     }
