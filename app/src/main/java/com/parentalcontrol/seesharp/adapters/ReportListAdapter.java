@@ -43,12 +43,12 @@ public class ReportListAdapter extends ArrayAdapter<String> {
         String[] newData = data.split("=");
         String[] content = newData[1].split("::");
         ZonedDateTime zd = ZonedDateTime.parse(newData[0]);
-        System.out.println(zd);
 
         ViewHolder viewHolder = (ViewHolder) convertView.getTag();
         viewHolder.title.setText(content[0]);
         viewHolder.message.setText(content[1]);
         viewHolder.timestamp.setText(zd.getHour()+":"+zd.getMinute());
+
         return convertView;
     }
 }

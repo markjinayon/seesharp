@@ -22,8 +22,6 @@ import androidx.annotation.NonNull;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.firebase.auth.FirebaseAuth;
@@ -60,7 +58,7 @@ public class SeeSharpAccessibilityService extends AccessibilityService {
 
     private ArrayList<String> appsToMonitorText;
 
-    final String URL = "https://seesharp-thesis.herokuapp.com/predict";
+    private final String URL = "https://seesharp-thesis.herokuapp.com/predict";
     private RequestQueue requestQueue;
 
     private int mDebugDepth;
@@ -77,6 +75,7 @@ public class SeeSharpAccessibilityService extends AccessibilityService {
         info.flags = AccessibilityServiceInfo.FLAG_REPORT_VIEW_IDS | AccessibilityServiceInfo.FLAG_RETRIEVE_INTERACTIVE_WINDOWS;
         setServiceInfo(info);
 
+        // initializing global variables
         requestQueue = Volley.newRequestQueue(getApplicationContext());
         previousUrlDetections = new HashMap<>();
         user = null;
@@ -232,10 +231,10 @@ public class SeeSharpAccessibilityService extends AccessibilityService {
                                         firebaseDatabase.getReference("predictions").child(user.accountId).child(text).setValue(packageName + "::" +prediction);
                                     }
                                 } catch (Exception e) {
-
+                                    e.printStackTrace();
                                 }
                             }, error -> {
-
+                                Log.e("StringRequest", error.getMessage());
                             }){
                         @Override
                         protected Map<String, String> getParams() {

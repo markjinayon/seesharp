@@ -23,13 +23,13 @@ public class ConnectedDeviceActivity extends AppCompatActivity {
 
     private TextView userName;
     private ImageView userImage;
-    private CardView appBlocking_connectedDevice, webFiltering_connectedDevice, screenTimeLimit_connectedDevice, aiAssistant_connectedDevice, reports_connectedDevice;
+    private CardView appBlocking_connectedDevice, aiAssistant_connectedDevice, webFiltering_connectedDevice, screenTimeLimit_connectedDevice, reports_connectedDevice;
 
     private FirebaseAuth firebaseAuth;
     private FirebaseDatabase firebaseDatabase;
     private FirebaseUser firebaseUser;
 
-    String accountId;
+    private String accountId;
 
     private User connectedUserData;
 
@@ -59,6 +59,9 @@ public class ConnectedDeviceActivity extends AppCompatActivity {
         reports_connectedDevice = findViewById(R.id.reports_connectedDevice);
         reports_connectedDevice.setOnClickListener(view -> openReportsActivity());
 
+        aiAssistant_connectedDevice = findViewById(R.id.aiAssistant_connectedDevice);
+        aiAssistant_connectedDevice.setOnClickListener(view -> openAiAssistantActivity());
+
         firebaseDatabase.getReference("users").child(accountId).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -86,6 +89,12 @@ public class ConnectedDeviceActivity extends AppCompatActivity {
 
     private void openReportsActivity() {
         Intent intent = new Intent(this, ReportsActivity.class);
+        intent.putExtra("accountId", accountId);
+        startActivity(intent);
+    }
+
+    private void openAiAssistantActivity() {
+        Intent intent = new Intent(this, ParentAiAssistantActivity.class);
         intent.putExtra("accountId", accountId);
         startActivity(intent);
     }
