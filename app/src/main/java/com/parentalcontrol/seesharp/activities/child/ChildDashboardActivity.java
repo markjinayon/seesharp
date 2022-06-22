@@ -16,7 +16,11 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 
+import android.app.AppOpsManager;
+import android.content.Context;
 import android.content.Intent;
+import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.widget.ImageView;
@@ -79,14 +83,16 @@ public class ChildDashboardActivity extends AppCompatActivity {
                         User user = snapshot.getValue(User.class);
                         if (user == null) return;
 
-                        if (!user.appBlockingState && firebaseAuth.getCurrentUser() != null) {
-                            Toast.makeText(getApplicationContext(), "Enable SeeSharp's accessibility service!", Toast.LENGTH_LONG).show();
-                            startActivity(new Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_NO_HISTORY));
-                        }
+                        if (firebaseAuth.getCurrentUser() != null) {
+                            if (!DeviceHelper.isAccessibilityServiceEnabled(getApplicationContext(), SeeSharpAccessibilityService.class)) {
+                                //Toast.makeText(getApplicationContext(), "Enable SeeSharp's accessibility service!", Toast.LENGTH_LONG).show();
+                                startActivity(new Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_NO_HISTORY));
+                            }
 
-                        if (!user.appTimeLimitState && firebaseAuth.getCurrentUser() != null) {
-                            Toast.makeText(getApplicationContext(), "Enable SeeSharp's usage access!", Toast.LENGTH_LONG).show();
-                            startActivity(new Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_NO_HISTORY));
+                            if (!checkUsageAccess()) {
+                                //Toast.makeText(getApplicationContext(), "Enable SeeSharp's usage access!", Toast.LENGTH_LONG).show();
+                                startActivity(new Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_NO_HISTORY));
+                            }
                         }
 
                         ((TextView) findViewById(R.id.userName)).setText(user.fullName);
@@ -145,6 +151,20 @@ public class ChildDashboardActivity extends AppCompatActivity {
 
     private void openScreenTimeActivity() {
         startActivity(new Intent(this, ScreenTimeActivity.class));
+    }
+
+    private boolean checkUsageAccess() {
+        Context context = getApplicationContext();
+        try {
+            PackageManager packageManager = context.getPackageManager();
+            ApplicationInfo applicationInfo = packageManager.getApplicationInfo(context.getPackageName(), 0);
+            AppOpsManager appOpsManager = (AppOpsManager) context.getSystemService(Context.APP_OPS_SERVICE);
+            int mode = appOpsManager.checkOpNoThrow(AppOpsManager.OPSTR_GET_USAGE_STATS, applicationInfo.uid, applicationInfo.packageName);
+            return (mode == AppOpsManager.MODE_ALLOWED);
+
+        } catch (PackageManager.NameNotFoundException e) {
+            return false;
+        }
     }
 
 }

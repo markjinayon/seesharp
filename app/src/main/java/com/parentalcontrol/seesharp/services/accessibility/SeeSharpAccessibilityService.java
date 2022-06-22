@@ -137,7 +137,7 @@ public class SeeSharpAccessibilityService extends AccessibilityService {
         if (user == null) return;
 
         firebaseDatabase.getReference("users").child(user.accountId).child("appBlockingState").setValue(false);
-        firebaseDatabase.getReference("users").child(user.accountId).child("appTimeLimitState").setValue(false);
+        firebaseDatabase.getReference("users").child(user.accountId).child("appTimeLimitState").setValue(checkUsageAccess());
         firebaseDatabase.getReference("users").child(user.accountId).child("webFilteringState").setValue(false);
 
         isActive = false;
@@ -157,7 +157,7 @@ public class SeeSharpAccessibilityService extends AccessibilityService {
 
         String packageName = accessibilityEvent.getPackageName().toString();
 
-        //Log.e(packageName, AccessibilityEvent.eventTypeToString(accessibilityEvent.getEventType()));
+        Log.e(TAG, checkUsageAccess()+"");
 
         if (accessibilityEvent.getEventType() == AccessibilityEvent.TYPE_WINDOW_CONTENT_CHANGED) {
             monitorTexts(accessibilityEvent);
@@ -234,7 +234,7 @@ public class SeeSharpAccessibilityService extends AccessibilityService {
                                     e.printStackTrace();
                                 }
                             }, error -> {
-                                Log.e("StringRequest", error.getMessage());
+
                             }){
                         @Override
                         protected Map<String, String> getParams() {
