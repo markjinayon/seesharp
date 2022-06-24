@@ -1,5 +1,6 @@
 package com.parentalcontrol.seesharp.adapters;
 
+import android.app.TimePickerDialog;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
@@ -7,9 +8,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.TimePicker;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -22,16 +25,19 @@ import com.parentalcontrol.seesharp.R;
 import java.util.ArrayList;
 
 public class ScreenTimeListAdapter extends ArrayAdapter<String> {
-    FirebaseAuth firebaseAuth;
-    FirebaseDatabase firebaseDatabase;
-    FirebaseUser firebaseUser;
+    private FirebaseAuth firebaseAuth;
+    private FirebaseDatabase firebaseDatabase;
+    private FirebaseUser firebaseUser;
 
-    ArrayList<String> appTimeLimits;
+    private ArrayList<String> appTimeLimits;
+
+    private Context context;
 
     static class ViewHolder {
         public TextView appLabel, appPackageName;
         public ImageView appIcon;
-        Spinner spinner;
+        public Spinner spinner;
+        public Button pickTime;
     }
 
     public ScreenTimeListAdapter(@NonNull Context context, @NonNull ArrayList<String> arrayList) {
@@ -41,6 +47,7 @@ public class ScreenTimeListAdapter extends ArrayAdapter<String> {
         firebaseDatabase = FirebaseDatabase.getInstance();
         firebaseUser = firebaseAuth.getCurrentUser();
 
+        this.context = context;
         this.appTimeLimits = arrayList;
     }
 
@@ -61,6 +68,7 @@ public class ScreenTimeListAdapter extends ArrayAdapter<String> {
             viewHolder.appIcon = convertView.findViewById(R.id.appIcon_screenTime);
             viewHolder.spinner = convertView.findViewById(R.id.spinner_screenTime);
             viewHolder.appPackageName = convertView.findViewById(R.id.appPackageName_screenTime);
+            viewHolder.pickTime = convertView.findViewById(R.id.pickTime);
 
             convertView.setTag(viewHolder);
         }
@@ -101,6 +109,18 @@ public class ScreenTimeListAdapter extends ArrayAdapter<String> {
             public void onNothingSelected(AdapterView<?> adapterView) {
 
             }
+        });
+
+        viewHolder.pickTime.setOnClickListener(null);
+        viewHolder.pickTime.setOnClickListener(view -> {
+            System.out.println("Clicked");
+            TimePickerDialog timePickerDialog = new TimePickerDialog(context, new TimePickerDialog.OnTimeSetListener() {
+                @Override
+                public void onTimeSet(TimePicker timePicker, int i, int i1) {
+
+                }
+            }, 0, 0, true);
+            timePickerDialog.show();
         });
 
         return convertView;
